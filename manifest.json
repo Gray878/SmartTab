@@ -11,9 +11,7 @@
     "bookmarks",
     "favicon",
     "storage",
-    "history",
-    "alarms",
-    "tabGroups"
+    "tabs"
   ],
   "host_permissions": [
     "https://*/*",
