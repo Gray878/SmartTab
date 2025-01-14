@@ -12,7 +12,7 @@
         "description": "Message de bienvenue affiché à l'utilisateur"
     },
     "searchPlaceholder": {
-        "message": "Rechercher ou entrer une adresse web",
+        "message": "Appuyez sur Entrée pour rechercher",
         "description": "Texte de l'espace réservé pour le champ de recherche"
     },
     "editDialogTitle": {

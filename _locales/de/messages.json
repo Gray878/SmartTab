@@ -12,7 +12,7 @@
         "description": "Willkommensnachricht, die dem Benutzer angezeigt wird"
     },
     "searchPlaceholder": {
-        "message": "Drücken Sie Enter, um zu suchen, oder Cmd/Ctrl + Enter, um alle Suchmaschinen zu durchsuchen",
+        "message": "Drücken Sie Enter, um zu suchen",
         "description": "Platzhaltertext für das Suchfeld"
     },
     "editDialogTitle": {

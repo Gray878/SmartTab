@@ -12,7 +12,7 @@
         "description": "显示给用户的欢迎消息"
     },
     "searchPlaceholder": {
-        "message": "按 Enter 键搜索，或按 Cmd/Ctrl + Enter 键搜索所有搜索引擎",
+        "message": "按 Enter 键搜索",
         "description": "搜索输入框的占位文本"
     },
     "editDialogTitle": {

@@ -12,7 +12,7 @@
         "description": "ユーザーに表示されるウェルカムメッセージ"
     },
     "searchPlaceholder": {
-        "message": "Enter キーを押して検索、または Cmd/Ctrl + Enter キーを押してすべての検索エンジンを検索",
+        "message": "Enter キーを押して検索",
         "description": "検索入力フィールドのプレースホルダーテキスト"
     },
     "editDialogTitle": {

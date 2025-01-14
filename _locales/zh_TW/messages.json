@@ -12,7 +12,7 @@
         "description": "顯示給使用者的歡迎訊息"
     },
     "searchPlaceholder": {
-        "message": "按 Enter 鍵搜尋，或按 Cmd/Ctrl + Enter 鍵搜尋所有搜尋引擎",
+        "message": "按 Enter 鍵搜尋",
         "description": "搜尋輸入框的佔位文字"
     },
     "editDialogTitle": {

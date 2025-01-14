@@ -12,7 +12,7 @@
         "description": "Welcome message displayed to the user"
     },
     "searchPlaceholder": {
-        "message": "Press Enter to search, or Cmd/Ctrl + Enter to search all search engines",
+        "message": "Press Enter to search",
         "description": "Placeholder text for the search input"
     },
     "editDialogTitle": {

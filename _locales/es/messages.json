@@ -12,7 +12,7 @@
         "description": "Mensaje de bienvenida mostrado al usuario"
     },
     "searchPlaceholder": {
-        "message": "Buscar o ingresar dirección web",
+        "message": "Presiona Enter para buscar",
         "description": "Texto de marcador de posición para el campo de búsqueda"
     },
     "editDialogTitle": {

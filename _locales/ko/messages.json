@@ -12,7 +12,7 @@
         "description": "사용자에게 표시되는 환영 메시지"
     },
     "searchPlaceholder": {
-        "message": "Enter 키를 눌러 검색하거나, Cmd/Ctrl + Enter 키를 눌러 모든 검색 엔진을 검색",
+        "message": "Enter 키를 눌러 검색",
         "description": "검색 입력 필드의 플레이스홀더 텍스트"
     },
     "editDialogTitle": {

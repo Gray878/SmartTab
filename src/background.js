@@ -54,7 +54,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           sendResponse({ bookmarks: bookmarkTreeNodes });
         }
       });
-      return true;  // Indicate that the response will be sent asynchronously
+      return true;
 
     case 'getDefaultBookmarkId':
       console.log('Sending defaultBookmarkId:', defaultBookmarkId);
@@ -72,14 +72,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           sendResponse({ success: true });
         }
       });
-      return true;  // Indicate that the response will be sent asynchronously
+      return true;
 
     case 'openInternalPage':
       handleOpenInternalPage(request, sendResponse);
-      return true;
-
-    case 'openMultipleTabsAndGroup':
-      handleOpenMultipleTabsAndGroup(request, sendResponse);
       return true;
 
     case 'updateFloatingBallSetting':
@@ -105,56 +101,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   return false; // 对于同步响应的情况
 });
-function handleOpenMultipleTabsAndGroup(request, sendResponse) {
-  const { urls, groupName } = request;
-  const tabIds = [];
-
-  const createTabPromises = urls.map(url => {
-    return new Promise((resolve) => {
-      chrome.tabs.create({ url: url, active: false }, function (tab) {
-        if (chrome.runtime.lastError) {
-          console.error(`创建标签页失败: ${chrome.runtime.lastError.message}`);
-          resolve(); // 继续处理其他标签页
-        } else {
-          tabIds.push(tab.id);
-          resolve();
-        }
-      });
-    });
-  });
-
-  Promise.all(createTabPromises).then(() => {
-    if (tabIds.length > 1) {
-      chrome.tabs.group({ tabIds: tabIds }, function (groupId) {
-        if (chrome.runtime.lastError) {
-          console.error(`创建标签组失败: ${chrome.runtime.lastError.message}`);
-          sendResponse({ success: false, error: chrome.runtime.lastError.message });
-          return;
-        }
-        if (chrome.tabGroups) {
-          chrome.tabGroups.update(groupId, {
-            title: groupName,
-            color: 'cyan'
-          }, function () {
-            if (chrome.runtime.lastError) {
-              console.error(`更新标签组名称和颜色失败: ${chrome.runtime.lastError.message}`);
-              sendResponse({ success: true, warning: chrome.runtime.lastError.message });
-            } else {
-              console.log(`标签组名称设置为: ${groupName}，颜色设置为青色`);
-              sendResponse({ success: true });
-            }
-          });
-        } else {
-          console.error('tabGroups API 不可用');
-          sendResponse({ success: true, warning: 'tabGroups API 不可用，无法设置组名和颜色' });
-        }
-      });
-    } else {
-      console.log('URL 数量不大于 1，直接打开标签页，不创建标签组');
-      sendResponse({ success: true, message: 'URL 数量不大于 1，直接打开标签页，不创建标签组' });
-    }
-  });
-}
 
 function handleOpenInternalPage(request, sendResponse) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {

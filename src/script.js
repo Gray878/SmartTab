@@ -3422,13 +3422,7 @@ document.addEventListener('DOMContentLoaded', function () {
         break;
       case 'Enter':
         e.preventDefault();
-        if (e.metaKey || e.ctrlKey) {
-          // 处理 Cmd/Ctrl + Enter
-          const query = searchInput.value.trim();
-          if (query) {
-            openAllSearchEnginesExceptCurrent(query);
-          }
-        } else if (index !== -1) {
+        if (index !== -1) {
           e.stopPropagation(); // 阻止事件冒泡
           const selectedItem = items[index];
           const suggestionType = selectedItem.getAttribute('data-type');
