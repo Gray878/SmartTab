@@ -3543,4 +3543,97 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // 浮动球设置
+  function initFloatingBallSettings() {
+    try {
+      const enableFloatingBallCheckbox = document.getElementById('enable-floating-ball');
+      if (!enableFloatingBallCheckbox) {
+        console.log('浮动球设置元素未找到，可能是正常的');
+        return;
+      }
+
+      // 加载设置
+      chrome.storage.sync.get(['enableFloatingBall'], function (result) {
+        try {
+          if (enableFloatingBallCheckbox && document.body.contains(enableFloatingBallCheckbox)) {
+            enableFloatingBallCheckbox.checked = result.enableFloatingBall !== false;
+          }
+        } catch (error) {
+          console.error('设置浮动球状态失败:', error);
+        }
+      });
+
+      // 保存设置
+      if (document.body.contains(enableFloatingBallCheckbox)) {
+        enableFloatingBallCheckbox.addEventListener('change', function() {
+          const isEnabled = this.checked;
+          chrome.runtime.sendMessage({
+            action: 'updateFloatingBallSetting', 
+            enabled: isEnabled
+          }, function(response) {
+            if (response && response.success) {
+              console.log('浮动球设置更新成功');
+            } else {
+              console.error('浮动球设置更新失败');
+            }
+          });
+        });
+      }
+    } catch (error) {
+      console.error('初始化浮动球设置失败:', error);
+    }
+  }
+
+  // 更新文件夹名称
+  async function updateFolderName(folderId, newName) {
+    try {
+      console.log('更新文件夹名称:', {
+        folderId,
+        newName
+      });
+
+      // 验证参数
+      if (!folderId) {
+        throw new Error('书签ID不能为空');
+      }
+      if (typeof folderId !== 'string') {
+        folderId = String(folderId);
+      }
+      if (!newName || typeof newName !== 'string') {
+        throw new Error('文件夹名称无效');
+      }
+
+      // 检查文件夹是否存在
+      const folder = await new Promise((resolve, reject) => {
+        chrome.bookmarks.get(folderId, (result) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(`获取书签失败: ${chrome.runtime.lastError.message}`));
+            return;
+          }
+          if (!result || result.length === 0) {
+            reject(new Error('未找到指定的文件夹'));
+            return;
+          }
+          resolve(result[0]);
+        });
+      });
+
+      // 更新文件夹名称
+      return new Promise((resolve, reject) => {
+        chrome.bookmarks.update(folderId, {
+          title: newName
+        }, (result) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(`更新文件夹失败: ${chrome.runtime.lastError.message}`));
+            return;
+          }
+          console.log('文件夹更新成功:', result);
+          resolve(result);
+        });
+      });
+    } catch (error) {
+      console.error('更新文件夹名称失败:', error);
+      throw error;
+    }
+  }
 });

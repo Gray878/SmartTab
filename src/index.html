@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" href="../images/favicon.png">
   <style id="dynamic-background"></style>
   <script src="localization.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="preload" href="../images/dida365-logo.svg" as="image">
 </head>
 <body class="h-screen flex flex-col">
   <div id="sidebar-container" class="flex collapsed">
@@ -65,29 +67,6 @@
           </form>
         </div>
       </div>
-      <div class="bookmarks-container">
-        <div id="folder-name" class="folder-name">
-        </div>
-        <div class="flex flex-wrap gap-4 justify-center flex-grow" id="bookmarks-list">
-          <!-- 添加占位符 -->
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-
-          <!-- 可以根据需要添加更多占位符 -->
-        </div>
-      </div>
       <!-- Edit Bookmark Dialog -->
       <div id="edit-dialog" class="modal">
         <div class="modal-content">
@@ -121,9 +100,123 @@
         </div>
       </div>
       <footer class="bg-gray-50 text-center p-4 border-t border-gray-200 mt-4">
-      <!-- 新增的进度条容器 -->
-      <div id="year-progress" class="year-progress-container"></div>
       </footer>
+      <!-- 待办事项区域 -->
+      <div class="todo-section">
+        <!-- 滴答清单登录表单 -->
+        <div id="dida365-login" class="dida365-login">
+          <h3>连接滴答清单</h3>
+          <p class="login-desc">使用滴答清单账号登录，同步你的待办事项</p>
+          <button id="connect-dida365" class="connect-button">
+            <img src="../images/dida365-logo.svg" alt="滴答清单" class="dida-logo">
+            连接滴答清单
+          </button>
+          <div class="login-links">
+            <a href="https://www.dida365.com/signup" target="_blank">还没有账号？立即注册</a>
+          </div>
+        </div>
+
+        <!-- 项目和任务区域 -->
+        <div class="todo-content">
+          <!-- 项目列表 -->
+          <div class="project-section">
+            <div class="project-header">
+              <h3>项目列表</h3>
+              <div class="project-actions">
+                <button id="refresh-projects" class="icon-button" title="刷新项目列表">
+                  <span class="material-icons">refresh</span>
+                </button>
+              </div>
+            </div>
+            <div id="project-list" class="project-list">
+              <!-- 项目将通过JavaScript动态添加 -->
+            </div>
+          </div>
+
+          <!-- 任务列表 -->
+          <div class="tasks-section">
+            <div class="todo-header">
+              <div class="todo-header-left">
+                <h2 id="current-project-name">选择项目</h2>
+                <span class="todo-stats"></span>
+              </div>
+              <div class="todo-header-right">
+                <div class="sync-status">
+                  <span class="material-icons">sync</span>
+                  <span class="sync-text">已同步</span>
+                </div>
+                <div class="todo-filters">
+                  <input type="text" id="todo-search" placeholder="搜索任务..." class="todo-search">
+                  <select id="todo-filter" class="todo-filter">
+                    <option value="all">全部</option>
+                    <option value="active">进行中</option>
+                    <option value="completed">已完成</option>
+                  </select>
+                </div>
+                <button id="add-todo" class="add-todo-btn" disabled>
+                  <span class="material-icons">add</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 添加空状态提示 -->
+            <div id="todo-empty" class="todo-empty">
+              <span class="material-icons">assignment</span>
+              <p>请选择一个项目</p>
+            </div>
+
+            <!-- 任务列表容器 -->
+            <div id="todo-list" class="todo-list">
+              <!-- 任务将通过JavaScript动态添加 -->
+            </div>
+
+            <!-- 任务表单 -->
+            <div id="todo-form" class="todo-form hidden">
+              <input type="text" id="todo-title" placeholder="任务名称" required>
+              <input type="datetime-local" id="todo-due-date">
+              <select id="todo-priority">
+                <option value="low">低优先级</option>
+                <option value="medium">中优先级</option>
+                <option value="high">高优先级</option>
+              </select>
+              <select id="todo-repeat">
+                <option value="none">不重复</option>
+                <option value="daily">每天</option>
+                <option value="weekly">每周</option>
+                <option value="monthly">每月</option>
+              </select>
+              <input type="text" id="todo-tags" placeholder="标签(用逗号分隔)">
+              <div class="todo-form-buttons">
+                <button type="button" id="save-todo">保存</button>
+                <button type="button" id="cancel-todo">取消</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bookmarks-container">
+        <div id="folder-name" class="folder-name">
+        </div>
+        <div class="flex flex-wrap gap-4 justify-center flex-grow" id="bookmarks-list">
+          <!-- 添加占位符 -->
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+          <div class="bookmark-placeholder"></div>
+
+          <!-- 可以根据需要添加更多占位符 -->
+        </div>
+      </div>
     </main>
   </div>
   <div id="more-button-toast" class="toast">
@@ -135,9 +228,8 @@
   <script type="module" src="welcome.js"></script>
   <script src="background.js"></script>
   <script src="qrcode.min.js"></script>
-  <script src="quick-links.js"></script>
-  <script src="progress.js"></script> <!-- 新增的脚本 -->
-<div class="links-icons">
+  <script type="module" src="todo.js"></script>
+<!-- <div class="links-icons">
   <a href="#history" id="history-link" data-i18n-title="historyLinkTitle">
     <span class="material-icons">history</span>
   </a>
@@ -150,7 +242,7 @@
   <a href="#extensions" id="extensions-link" data-i18n-title="extensionsLinkTitle">
     <span class="material-icons">extension</span>
   </a>
-</div>
+</div> -->
 <div class="settings-icon">
   <a href="#settings" id="settings-link" data-i18n-title="settingsLinkTitle">
     <span class="material-icons">settings</span>

@@ -11,12 +11,28 @@
     "bookmarks",
     "favicon",
     "storage",
-    "tabs"
+    "tabs",
+    "notifications",
+    "identity"
   ],
+  "oauth2": {
+    "client_id": "v06ClDCHAU96m7QJqc",
+    "scopes": [
+      "tasks:read",
+      "tasks:write"
+    ]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv8+LmA7QqQ==",
   "host_permissions": [
     "https://*/*",
-    "http://*/*"
+    "http://*/*",
+    "https://api.dida365.com/*",
+    "https://dida365.com/*",
+    "https://*.chromiumapp.org/*"
   ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.dida365.com https://dida365.com;"
+  },
   "action": {
     "default_icon": {
       "16": "images/icon-16.png",
@@ -35,7 +51,10 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content.js"]
+      "js": [
+        "src/content.js",
+        "src/todo.js"
+      ]
     }
   ],
   "web_accessible_resources": [
