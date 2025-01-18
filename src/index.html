@@ -117,80 +117,93 @@
         </div>
 
         <!-- 项目和任务区域 -->
-        <div class="todo-content">
+        <div class="todo-content" style="display: none;">
           <!-- 项目列表 -->
-          <div class="project-section">
-            <div class="project-header">
-              <h3>项目列表</h3>
-              <div class="project-actions">
-                <button id="refresh-projects" class="icon-button" title="刷新项目列表">
-                  <span class="material-icons">refresh</span>
-                </button>
+          <div class="project-list-container">
+            <h2 class="list-title">项目列表</h2>
+            <div id="project-list"></div>
+          </div>
+          
+          <!-- 进行中任务列表 -->
+          <div class="todo-list-container">
+            <div class="todo-header">
+              <h2 id="current-project-name">
+                <span class="project-title"></span>
+                <span class="task-count"></span>
+              </h2>
+            </div>
+            
+            <!-- 快速创建任务输入框 -->
+            <div class="quick-add-task" style="display: none;">
+              <div class="quick-add-input-wrapper">
+                <input type="text" id="quick-add-input" placeholder="输入任务标题，按回车创建">
+                <div class="quick-add-actions">
+                  <button class="icon-button" id="quick-add-settings" title="更多设置">
+                    <span class="material-icons">settings</span>
+                  </button>
+                </div>
+              </div>
+              <!-- 任务设置下拉面板 -->
+              <div class="task-settings-panel" style="display: none;">
+                <div class="form-group">
+                  <label>优先级</label>
+                  <div class="input-wrapper">
+                    <div class="priority-buttons">
+                      <button type="button" class="priority-button" data-priority="0">
+                        <span class="material-icons">radio_button_unchecked</span>
+                        普通
+                      </button>
+                      <button type="button" class="priority-button" data-priority="1">
+                        <span class="material-icons">radio_button_unchecked</span>
+                        低
+                      </button>
+                      <button type="button" class="priority-button" data-priority="3">
+                        <span class="material-icons">radio_button_unchecked</span>
+                        中
+                      </button>
+                      <button type="button" class="priority-button" data-priority="5">
+                        <span class="material-icons">radio_button_unchecked</span>
+                        高
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="quick-add-due-date">截止日期</label>
+                  <div class="input-wrapper">
+                    <input type="datetime-local" id="quick-add-due-date">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="quick-add-tags">标签</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="quick-add-tags" placeholder="用英文逗号分隔多个标签">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="primary-button" id="save-quick-task">保存</button>
+                  <button class="secondary-button" id="cancel-quick-task">取消</button>
+                </div>
               </div>
             </div>
-            <div id="project-list" class="project-list">
-              <!-- 项目将通过JavaScript动态添加 -->
+
+            <h3 class="list-title">
+              进行中
+              <span class="count" id="active-count">0</span>
+            </h3>
+            <div id="todo-list"></div>
+            <div id="todo-empty" style="display: none;">
+              <p>当前项目暂无任务</p>
             </div>
           </div>
 
-          <!-- 任务列表 -->
-          <div class="tasks-section">
-            <div class="todo-header">
-              <div class="todo-header-left">
-                <h2 id="current-project-name">选择项目</h2>
-                <span class="todo-stats"></span>
-              </div>
-              <div class="todo-header-right">
-                <div class="sync-status">
-                  <span class="material-icons">sync</span>
-                  <span class="sync-text">已同步</span>
-                </div>
-                <div class="todo-filters">
-                  <input type="text" id="todo-search" placeholder="搜索任务..." class="todo-search">
-                  <select id="todo-filter" class="todo-filter">
-                    <option value="all">全部</option>
-                    <option value="active">进行中</option>
-                    <option value="completed">已完成</option>
-                  </select>
-                </div>
-                <button id="add-todo" class="add-todo-btn" disabled>
-                  <span class="material-icons">add</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 添加空状态提示 -->
-            <div id="todo-empty" class="todo-empty">
-              <span class="material-icons">assignment</span>
-              <p>请选择一个项目</p>
-            </div>
-
-            <!-- 任务列表容器 -->
-            <div id="todo-list" class="todo-list">
-              <!-- 任务将通过JavaScript动态添加 -->
-            </div>
-
-            <!-- 任务表单 -->
-            <div id="todo-form" class="todo-form hidden">
-              <input type="text" id="todo-title" placeholder="任务名称" required>
-              <input type="datetime-local" id="todo-due-date">
-              <select id="todo-priority">
-                <option value="low">低优先级</option>
-                <option value="medium">中优先级</option>
-                <option value="high">高优先级</option>
-              </select>
-              <select id="todo-repeat">
-                <option value="none">不重复</option>
-                <option value="daily">每天</option>
-                <option value="weekly">每周</option>
-                <option value="monthly">每月</option>
-              </select>
-              <input type="text" id="todo-tags" placeholder="标签(用逗号分隔)">
-              <div class="todo-form-buttons">
-                <button type="button" id="save-todo">保存</button>
-                <button type="button" id="cancel-todo">取消</button>
-              </div>
-            </div>
+          <!-- 已完成任务列表 -->
+          <div class="completed-list-container">
+            <h3 class="list-title">
+              已完成
+              <span class="count" id="completed-count">0</span>
+            </h3>
+            <div id="completed-list"></div>
           </div>
         </div>
       </div>
@@ -213,8 +226,6 @@
           <div class="bookmark-placeholder"></div>
           <div class="bookmark-placeholder"></div>
           <div class="bookmark-placeholder"></div>
-
-          <!-- 可以根据需要添加更多占位符 -->
         </div>
       </div>
     </main>
@@ -289,5 +300,58 @@
     </div>
   </div>
   <div id="toast" class="toast" style="display: none;"></div>
+  <!-- 任务编辑面板 -->
+  <div class="task-edit-panel" style="display: none;">
+    <div class="quick-add-input-wrapper">
+      <input type="text" id="edit-task-title" placeholder="任务标题">
+      <div class="quick-add-actions">
+        <button class="icon-button" id="edit-task-settings" title="更多设置">
+          <span class="material-icons">settings</span>
+        </button>
+      </div>
+    </div>
+    <!-- 任务设置下拉面板 -->
+    <div class="task-settings-panel" style="display: none;">
+      <div class="form-group">
+        <label>优先级</label>
+        <div class="input-wrapper">
+          <div class="priority-buttons">
+            <button type="button" class="priority-button" data-priority="0">
+              <span class="material-icons">radio_button_unchecked</span>
+              普通
+            </button>
+            <button type="button" class="priority-button" data-priority="1">
+              <span class="material-icons">radio_button_unchecked</span>
+              低
+            </button>
+            <button type="button" class="priority-button" data-priority="3">
+              <span class="material-icons">radio_button_unchecked</span>
+              中
+            </button>
+            <button type="button" class="priority-button" data-priority="5">
+              <span class="material-icons">radio_button_unchecked</span>
+              高
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="edit-task-due-date">截止日期</label>
+        <div class="input-wrapper">
+          <input type="datetime-local" id="edit-task-due-date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="edit-task-tags">标签</label>
+        <div class="input-wrapper">
+          <input type="text" id="edit-task-tags" placeholder="用英文逗号分隔多个标签">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="primary-button" id="save-edit-task">保存</button>
+        <button class="secondary-button" id="cancel-edit-task">取消</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

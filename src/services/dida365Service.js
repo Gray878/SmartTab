@@ -77,7 +77,12 @@ function validateRedirectUrl(url) {
 
 export class Dida365Service {
   constructor() {
+    // 数据API基础路径
     this.apiBase = 'https://api.dida365.com/api/v2';
+    // 授权API基础路径
+    this.authBase = 'https://dida365.com';
+    // Open API基础路径
+    this.openApiBase = 'https://api.dida365.com/open/v1';
     this.clientId = 'SmartTab';
     this.redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`;
     this.accessToken = null;
@@ -130,58 +135,14 @@ export class Dida365Service {
   }
 
   // 更新任务状态
-  async updateTaskStatus(taskId, status) {
+  async updateTaskStatus(projectId, taskId, status) {
     try {
-      // 首先获取任务所属的项目ID和任务详情
-      const projects = await this.getProjects();
-      let projectId = null;
-      let taskData = null;
-      
-      // 遍历项目查找任务
-      for (const project of projects) {
-        try {
-          const projectData = await this.getProjectData(project.id);
-          const task = projectData.tasks.find(t => t.id === taskId);
-          if (task) {
-            projectId = project.id;
-            taskData = task;
-            break;
-          }
-        } catch (error) {
-          console.warn(`检查项目 ${project.id} 时出错:`, error);
-        }
-      }
-
-      if (!projectId || !taskData) {
-        throw new Error('找不到任务所属的项目');
-      }
-
-      // 转换状态为数字: 'completed' -> 2, 'normal' -> 0
-      const statusCode = status === 'completed' ? 2 : 0;
-
-      // 使用官方API更新任务
-      const response = await fetch(`https://api.dida365.com/open/v1/task/${taskId}`, {
+      const response = await fetch(`${this.openApiBase}/project/${projectId}/task/${taskId}/complete`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${this.accessToken}`,
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: taskId,
-          projectId: projectId,
-          status: statusCode,
-          title: taskData.title,
-          content: taskData.content || '',
-          desc: taskData.desc || '',
-          priority: taskData.priority || 0,
-          dueDate: taskData.dueDate || null,
-          isAllDay: taskData.isAllDay || false,
-          reminders: taskData.reminders || [],
-          repeatFlag: taskData.repeatFlag || null,
-          exDate: taskData.exDate || [],
-          completedTime: statusCode === 2 ? new Date().toISOString() : null,
-          tags: taskData.tags || []
-        })
+        }
       });
 
       if (!response.ok) {
@@ -189,7 +150,7 @@ export class Dida365Service {
         throw new Error(`更新任务状态失败: ${response.status} - ${errorText}`);
       }
 
-      return await response.json();
+      return true;
     } catch (error) {
       console.error('更新任务状态时出错:', error);
       throw error;
@@ -199,9 +160,21 @@ export class Dida365Service {
   // 检查登录状态
   async checkLoginStatus() {
     try {
+      // 先检查缓存的登录状态
+      const cachedStatus = await chrome.storage.local.get(['dida365_login_status', 'dida365_status_timestamp']);
+      const now = Date.now();
+      
+      // 如果有缓存的状态，且未过期（30分钟内），直接返回
+      if (cachedStatus.dida365_login_status && 
+          cachedStatus.dida365_status_timestamp && 
+          now - cachedStatus.dida365_status_timestamp < 30 * 60 * 1000) {
+        return cachedStatus.dida365_login_status;
+      }
+
       if (!this.accessToken) {
         const token = await this.getStoredToken();
         if (!token) {
+          await this.updateLoginStatus(false);
           return false;
         }
         this.accessToken = token;
@@ -216,10 +189,25 @@ export class Dida365Service {
         }
       });
 
-      return response.ok;
+      const isLoggedIn = response.ok;
+      await this.updateLoginStatus(isLoggedIn);
+      return isLoggedIn;
     } catch (error) {
       console.error('检查登录状态时出错:', error);
+      await this.updateLoginStatus(false);
       return false;
+    }
+  }
+
+  // 更新登录状态缓存
+  async updateLoginStatus(status) {
+    try {
+      await chrome.storage.local.set({
+        dida365_login_status: status,
+        dida365_status_timestamp: Date.now()
+      });
+    } catch (error) {
+      console.error('更新登录状态缓存时出错:', error);
     }
   }
 
@@ -260,7 +248,7 @@ export class Dida365Service {
       }
 
       const state = Math.random().toString(36).substring(7);
-      const authUrl = `https://dida365.com/oauth/authorize?` +
+      const authUrl = `${this.authBase}/oauth/authorize?` +
         `client_id=${this.clientId}&` +
         `redirect_uri=${encodeURIComponent(this.redirectUri)}&` +
         `scope=tasks:read tasks:write&` +
@@ -298,7 +286,7 @@ export class Dida365Service {
       }
 
       // 获取访问令牌
-      const tokenResponse = await fetch('https://dida365.com/oauth/token', {
+      const tokenResponse = await fetch(`${this.authBase}/oauth/token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -325,15 +313,123 @@ export class Dida365Service {
       return true;
     } catch (error) {
       console.error('授权过程出错:', error);
-      
-      // 检查是否需要重试
-      if (shouldRetry(error) && this.authRetryCount < this.maxAuthRetries) {
-        this.authRetryCount++;
-        console.log(`授权重试 (${this.authRetryCount}/${this.maxAuthRetries})`);
-        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-        return this.authorize();
+      throw error;
+    }
+  }
+
+  // 更新任务
+  async updateTask(task) {
+    try {
+      // 确保日期格式正确
+      let dueDate = null;
+      if (task.dueDate) {
+        if (typeof task.dueDate === 'string' && task.dueDate.endsWith('+0000')) {
+          dueDate = task.dueDate;
+        } else {
+          const date = new Date(task.dueDate);
+          dueDate = date.toISOString().replace(/\.\d{3}Z$/, '+0000');
+        }
       }
-      
+
+      const response = await fetch(`${this.openApiBase}/task/${task.id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          projectId: task.projectId,
+          title: task.title,
+          content: task.content || '',
+          desc: task.desc || '',
+          priority: task.priority || 0,
+          status: task.status || 0,
+          dueDate: dueDate,
+          isAllDay: task.isAllDay || false,
+          reminders: task.reminders || [],
+          repeatFlag: task.repeatFlag || null,
+          tags: task.tags || []
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`更新任务失败: ${response.status} - ${errorText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('更新任务时出错:', error);
+      throw error;
+    }
+  }
+
+  // 删除任务
+  async deleteTask(projectId, taskId) {
+    try {
+      const response = await fetch(`${this.openApiBase}/project/${projectId}/task/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`删除任务失败: ${response.status} - ${errorText}`);
+      }
+
+      return true;
+    } catch (error) {
+      console.error('删除任务时出错:', error);
+      throw error;
+    }
+  }
+
+  // 创建任务
+  async createTask(task) {
+    try {
+      // 确保日期格式正确
+      let dueDate = null;
+      if (task.dueDate) {
+        if (typeof task.dueDate === 'string' && task.dueDate.endsWith('+0000')) {
+          dueDate = task.dueDate;
+        } else {
+          const date = new Date(task.dueDate);
+          dueDate = date.toISOString().replace(/\.\d{3}Z$/, '+0000');
+        }
+      }
+
+      const response = await fetch(`${this.openApiBase}/task`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          projectId: task.projectId,
+          title: task.title,
+          content: task.content || '',
+          desc: task.desc || '',
+          priority: task.priority || 0,
+          status: task.status || 0,
+          dueDate: dueDate,
+          isAllDay: task.isAllDay || false,
+          reminders: task.reminders || [],
+          repeatFlag: task.repeatFlag || null,
+          tags: task.tags || []
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`创建任务失败: ${response.status} - ${errorText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('创建任务时出错:', error);
       throw error;
     }
   }
