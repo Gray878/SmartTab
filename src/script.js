@@ -10,6 +10,17 @@ function applyBackgroundColor() {
   const savedBg = localStorage.getItem('selectedBackground');
   if (savedBg) {
     document.documentElement.className = savedBg;
+    const activeOption = document.querySelector(`[data-bg="${savedBg}"]`);
+    if (activeOption) {
+      activeOption.classList.add('active');
+    }
+  } else {
+    // 如果没有保存的背景，使用默认背景
+    document.documentElement.className = 'gradient-background-7';
+    const defaultOption = document.querySelector('[data-bg="gradient-background-7"]');
+    if (defaultOption) {
+      defaultOption.classList.add('active');
+    }
   }
 }
 
@@ -1448,24 +1459,6 @@ document.addEventListener('DOMContentLoaded', function () {
       defaultOption.classList.add('active');
     }
   }
-  const enableFloatingBallCheckbox = document.getElementById('enable-floating-ball');
-
-  // 加载设置
-  chrome.storage.sync.get(['enableFloatingBall'], function (result) {
-    enableFloatingBallCheckbox.checked = result.enableFloatingBall !== false;
-  });
-
-  // 保存设置
-  enableFloatingBallCheckbox.addEventListener('change', function() {
-    const isEnabled = this.checked;
-    chrome.runtime.sendMessage({action: 'updateFloatingBallSetting', enabled: isEnabled}, function(response) {
-      if (response && response.success) {
-        console.log('Floating ball setting updated successfully');
-      } else {
-        console.error('Failed to update floating ball setting');
-      }
-    });
-  });
 });
 
 

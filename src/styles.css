@@ -197,19 +197,96 @@
 
 /* 登录表单样式调整 */
 .dida365-login {
-  padding: 20px;
-  margin-bottom: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  margin: 20px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  max-width: 400px;
+  text-align: center;
   display: none;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  transform: translateY(20px);
 }
 
 .dida365-login.show {
   display: block;
   opacity: 1;
+  transform: translateY(0);
+}
+
+.dida365-login h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.dida365-login .login-desc {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.dida365-login .connect-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 24px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 12px;
+}
+
+.dida365-login .connect-button:hover {
+  background: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.dida365-login .connect-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.dida365-login .connect-button:disabled {
+  background: #a0a0a0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.dida365-login .dida-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.dida365-login .login-links {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.dida365-login .login-links a {
+  color: #4a90e2;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.dida365-login .login-links a:hover {
+  color: #357abd;
+  text-decoration: underline;
 }
 
 /* 自定义滚动条样式 */

@@ -78,19 +78,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       handleOpenInternalPage(request, sendResponse);
       return true;
 
-    case 'updateFloatingBallSetting':
-      chrome.tabs.query({}, function(tabs) {
-        tabs.forEach(function(tab) {
-          chrome.tabs.sendMessage(tab.id, {action: 'updateFloatingBall', enabled: request.enabled});
-        });
-      });
-      // 保存设置到 storage
-      chrome.storage.sync.set({enableFloatingBall: request.enabled}, function() {
-        console.log('Floating ball setting saved:', request.enabled);
-      });
-      sendResponse({success: true});
-      return true;
-
     case 'reloadExtension':
       chrome.runtime.reload();
       return true;

@@ -48,33 +48,27 @@ class TodoManager {
 
   async init() {
     try {
-      // 确保待办事项区域可见
-      if (this.todoContent) {
-        this.todoContent.style.visibility = 'visible';
-        this.todoContent.style.display = 'flex';
-      }
-      if (this.loginForm) {
-        this.loginForm.style.visibility = 'hidden';
-        this.loginForm.style.display = 'none';
-      }
-
       // 检查登录状态
       const isLoggedIn = await this.didaService.checkLoginStatus();
       
       if (isLoggedIn) {
+        // 如果已登录，显示待办事项内容
+        if (this.todoContent) {
+          this.todoContent.style.visibility = 'visible';
+          this.todoContent.style.display = 'flex';
+        }
+        if (this.loginForm) {
+          this.loginForm.style.visibility = 'hidden';
+          this.loginForm.style.display = 'none';
+        }
         await this.loadProjects();
       } else {
-        // 如果未登录，优雅地切换到登录界面
+        // 如果未登录，显示登录表单
         if (this.todoContent) {
-          this.todoContent.style.opacity = '0';
-          requestAnimationFrame(() => {
-            this.todoContent.style.visibility = 'hidden';
-            this.todoContent.style.display = 'none';
-            this.showLoginForm();
-          });
-        } else {
-          this.showLoginForm();
+          this.todoContent.style.visibility = 'hidden';
+          this.todoContent.style.display = 'none';
         }
+        this.showLoginForm();
       }
     } catch (error) {
       console.error('初始化失败:', error);
@@ -84,9 +78,11 @@ class TodoManager {
 
   async showTodoContent() {
     if (this.loginForm) {
+      this.loginForm.style.visibility = 'hidden';
       this.loginForm.style.display = 'none';
     }
     if (this.todoContent) {
+      this.todoContent.style.visibility = 'visible';
       this.todoContent.style.display = 'flex';
     }
     await this.loadProjects();
@@ -96,6 +92,7 @@ class TodoManager {
     if (!this.loginForm) return;
     
     // 显示登录表单
+    this.loginForm.style.visibility = 'visible';
     this.loginForm.style.display = 'block';
     // 使用requestAnimationFrame确保display更改已生效
     requestAnimationFrame(() => {

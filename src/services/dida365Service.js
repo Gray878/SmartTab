@@ -83,7 +83,10 @@ export class Dida365Service {
     this.authBase = 'https://dida365.com';
     // Open API基础路径
     this.openApiBase = 'https://api.dida365.com/open/v1';
-    this.clientId = 'SmartTab';
+    // 从开发者平台获取的客户端ID
+    this.clientId = 'v06ClDCHAU96m7QJqc';
+    // 从开发者平台获取的客户端密钥
+    this.clientSecret = 'pHLC4)mT%h68Qr4^X*KE8(uZ%eB*z3Ii';
     this.redirectUri = `https://${chrome.runtime.id}.chromiumapp.org/`;
     this.accessToken = null;
   }
@@ -249,11 +252,15 @@ export class Dida365Service {
 
       const state = Math.random().toString(36).substring(7);
       const authUrl = `${this.authBase}/oauth/authorize?` +
-        `client_id=${this.clientId}&` +
+        `client_id=${encodeURIComponent(this.clientId)}&` +
         `redirect_uri=${encodeURIComponent(this.redirectUri)}&` +
-        `scope=tasks:read tasks:write&` +
+        `scope=${encodeURIComponent('tasks:read tasks:write')}&` +
         `response_type=code&` +
-        `state=${state}`;
+        `state=${encodeURIComponent(state)}&` +
+        `prompt=login&` +
+        `access_type=offline`;
+
+      console.log('授权URL:', authUrl);
 
       const responseUrl = await new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
@@ -290,14 +297,16 @@ export class Dida365Service {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ' + btoa(`${this.clientId}:${this.clientSecret}`),
           'X-Device': 'Chrome Extension',
           'X-Platform': 'web'
         },
         body: new URLSearchParams({
-          client_id: this.clientId,
+          grant_type: 'authorization_code',
           code: code,
           redirect_uri: this.redirectUri,
-          grant_type: 'authorization_code'
+          client_id: this.clientId,
+          client_secret: this.clientSecret
         })
       });
 
