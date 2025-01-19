@@ -13,223 +13,214 @@
   <link rel="preload" href="../images/dida365-logo.svg" as="image">
 </head>
 <body class="h-screen flex flex-col">
-  <div id="sidebar-container" class="flex collapsed">
-    <aside class="custom-width p-4 overflow-auto border-r border-gray-200 relative">
-      <div id="sidebar-logo" class="mb-4">
-        <img src="../images/logo.svg" alt="Logo" id="logo-image">
-        <h1 id="logo-title">TabMark</h1>
-      </div>
-      <ul id="categories-list" class="space-y-2"></ul>
-    </aside>
-    <main class="flex-1 bg-gray-50 p-8 overflow-auto flex flex-col">
-      <div class="welcome-search-container">
-        <div id="welcome-message" data-i18n="welcomeMessage"></div>
-      </div>
-      <div class="flex justify-between items-center mb-4">
-        <div class="search-container">
-          <form class="search-form" id="search-form">
-            <div style="position: relative;height: auto;">
-              <div class="search-icon-container">
-                <img id="search-engine-icon" src="../images/placeholder-icon.svg" alt="search-engine-icon"
-                  class="search-engine-icon">
-              </div>
-              <textarea class="search-input" data-i18n-placeholder="searchPlaceholder" rows="1" style="width: 100%; resize: none; padding-left: 40px;"></textarea>
+  <main class="flex-1 bg-gray-50 p-8 overflow-auto flex flex-col">
+    <div class="welcome-search-container">
+      <div id="welcome-message" data-i18n="welcomeMessage"></div>
+    </div>
+    <div class="flex justify-between items-center mb-4">
+      <div class="search-container">
+        <form class="search-form" id="search-form">
+          <div style="position: relative;height: auto;">
+            <div class="search-icon-container">
+              <img id="search-engine-icon" src="../images/placeholder-icon.svg" alt="search-engine-icon"
+                class="search-engine-icon">
             </div>
-            <div class="search-suggestions-wrapper">
-              <div class="line-container" id="line-container">
-                <hr class="custom-hr">
-              </div>
-              <ul id="search-suggestions" class="search-suggestions"></ul>
-              <div id="tabs-container" class="tabs">
-                <div class="tab" data-engine="bing">
-                  <img src="../images/bing-logo.png" alt="Bing" class="tab-icon"> Bing
-                </div>
-                <div class="tab active" data-engine="google">
-                  <img src="../images/google-logo.svg" alt="Google" class="tab-icon"> Google
-                </div>
-                <div class="tab" data-engine="doubao">
-                  <img src="../images/doubao-logo.png" alt="Doubao" class="tab-icon"> <span data-i18n="doubaoTab">豆包</span>
-                </div>
-                <div class="tab" data-engine="kimi">
-                  <img src="../images/kimi-logo.svg" alt="Kimi" class="tab-icon"> Kimi
-                </div>
-                <div class="tab" data-engine="metaso">
-                  <img src="../images/metaso-logo.png" alt="metaso" class="tab-icon"> <span data-i18n="metasoTab">秘塔</span>
-                </div>
-                <div class="tab" data-engine="felo">
-                  <img src="../images/felo-logo.svg" alt="Felo Search" class="tab-icon"> Felo
-                </div>
-                <div class="tab" data-engine="chatgpt">
-                  <img src="../images/chatgpt-logo.svg" alt="ChatGPT" class="tab-icon"> ChatGPT
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-      <!-- Edit Bookmark Dialog -->
-      <div id="edit-dialog" class="modal">
-        <div class="modal-content">
-          <span class="close-button">&times;</span>
-          <h2 data-i18n="editDialogTitle"></h2>
-          <form id="edit-form">
-            <label for="edit-name" data-i18n="editNameLabel"></label>
-            <input type="text" id="edit-name" name="name" required>
-            <label for="edit-url" data-i18n="editUrlLabel"></label>
-            <input type="url" id="edit-url" name="url" required>
-            <div class="form-buttons">
-              <button type="button" class="cancel-button" data-i18n="cancelButton"></button>
-              <button type="submit" data-i18n="saveButton"></button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <!-- Edit Category Dialog -->
-      <div id="edit-category-dialog" class="modal">
-        <div class="modal-content">
-          <span class="close-category-button">&times;</span>
-          <h2 data-i18n="renameFolderTitle"></h2>
-          <form id="edit-category-form">
-            <label for="edit-category-name" data-i18n="nameLabel">名称</label>
-            <input type="text" id="edit-category-name" name="name" required>
-            <div class="form-buttons">
-              <button type="button" class="cancel-category-button" data-i18n="cancelButton">取消</button>
-              <button type="submit" data-i18n="saveButton">保存</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <footer class="bg-gray-50 text-center p-4 border-t border-gray-200 mt-4">
-      </footer>
-      <!-- 待办事项区域 -->
-      <div class="todo-section">
-        <!-- 滴答清单登录表单 -->
-        <div id="dida365-login" class="dida365-login">
-          <h3>连接滴答清单</h3>
-          <p class="login-desc">使用滴答清单账号登录，同步你的待办事项</p>
-          <button id="connect-dida365" class="connect-button">
-            <img src="../images/dida365-logo.svg" alt="滴答清单" class="dida-logo">
-            连接滴答清单
-          </button>
-          <div class="login-links">
-            <a href="https://www.dida365.com/signup" target="_blank">还没有账号？立即注册</a>
+            <textarea class="search-input" data-i18n-placeholder="searchPlaceholder" rows="1" style="width: 100%; resize: none; padding-left: 40px;"></textarea>
           </div>
+          <div class="search-suggestions-wrapper">
+            <div class="line-container" id="line-container">
+              <hr class="custom-hr">
+            </div>
+            <ul id="search-suggestions" class="search-suggestions"></ul>
+            <div id="tabs-container" class="tabs">
+              <div class="tab" data-engine="bing">
+                <img src="../images/bing-logo.png" alt="Bing" class="tab-icon"> Bing
+              </div>
+              <div class="tab active" data-engine="google">
+                <img src="../images/google-logo.svg" alt="Google" class="tab-icon"> Google
+              </div>
+              <div class="tab" data-engine="doubao">
+                <img src="../images/doubao-logo.png" alt="Doubao" class="tab-icon"> <span data-i18n="doubaoTab">豆包</span>
+              </div>
+              <div class="tab" data-engine="kimi">
+                <img src="../images/kimi-logo.svg" alt="Kimi" class="tab-icon"> Kimi
+              </div>
+              <div class="tab" data-engine="metaso">
+                <img src="../images/metaso-logo.png" alt="metaso" class="tab-icon"> <span data-i18n="metasoTab">秘塔</span>
+              </div>
+              <div class="tab" data-engine="felo">
+                <img src="../images/felo-logo.svg" alt="Felo Search" class="tab-icon"> Felo
+              </div>
+              <div class="tab" data-engine="chatgpt">
+                <img src="../images/chatgpt-logo.svg" alt="ChatGPT" class="tab-icon"> ChatGPT
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Edit Bookmark Dialog -->
+    <div id="edit-dialog" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 data-i18n="editDialogTitle"></h2>
+        <form id="edit-form">
+          <label for="edit-name" data-i18n="editNameLabel"></label>
+          <input type="text" id="edit-name" name="name" required>
+          <label for="edit-url" data-i18n="editUrlLabel"></label>
+          <input type="url" id="edit-url" name="url" required>
+          <div class="form-buttons">
+            <button type="button" class="cancel-button" data-i18n="cancelButton"></button>
+            <button type="submit" data-i18n="saveButton"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Edit Category Dialog -->
+    <div id="edit-category-dialog" class="modal">
+      <div class="modal-content">
+        <span class="close-category-button">&times;</span>
+        <h2 data-i18n="renameFolderTitle"></h2>
+        <form id="edit-category-form">
+          <label for="edit-category-name" data-i18n="nameLabel">名称</label>
+          <input type="text" id="edit-category-name" name="name" required>
+          <div class="form-buttons">
+            <button type="button" class="cancel-category-button" data-i18n="cancelButton">取消</button>
+            <button type="submit" data-i18n="saveButton">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer class="bg-gray-50 text-center p-4 border-t border-gray-200 mt-4">
+    </footer>
+    <!-- 待办事项区域 -->
+    <div class="todo-section">
+      <!-- 滴答清单登录表单 -->
+      <div id="dida365-login" class="dida365-login">
+        <h3>连接滴答清单</h3>
+        <p class="login-desc">使用滴答清单账号登录，同步你的待办事项</p>
+        <button id="connect-dida365" class="connect-button">
+          <img src="../images/dida365-logo.svg" alt="滴答清单" class="dida-logo">
+          连接滴答清单
+        </button>
+        <div class="login-links">
+          <a href="https://www.dida365.com/signup" target="_blank">还没有账号？立即注册</a>
         </div>
+      </div>
 
-        <!-- 项目和任务区域 -->
-        <div class="todo-content" style="display: none;">
-          <!-- 项目列表 -->
-          <div class="project-list-container">
-            <h2 class="list-title">项目列表</h2>
-            <div id="project-list"></div>
+      <!-- 项目和任务区域 -->
+      <div class="todo-content" style="display: none;">
+        <!-- 项目列表 -->
+        <div class="project-list-container">
+          <h2 class="list-title">项目列表</h2>
+          <div id="project-list"></div>
+        </div>
+        
+        <!-- 进行中任务列表 -->
+        <div class="todo-list-container">
+          <div class="todo-header">
+            <h2 id="current-project-name">
+              <span class="project-title"></span>
+              <span class="task-count"></span>
+            </h2>
           </div>
           
-          <!-- 进行中任务列表 -->
-          <div class="todo-list-container">
-            <div class="todo-header">
-              <h2 id="current-project-name">
-                <span class="project-title"></span>
-                <span class="task-count"></span>
-              </h2>
-            </div>
-            
-            <!-- 快速创建任务输入框 -->
-            <div class="quick-add-task" style="display: none;">
-              <div class="quick-add-input-wrapper">
-                <input type="text" id="quick-add-input" placeholder="输入任务标题，按回车创建">
-                <div class="quick-add-actions">
-                  <button class="icon-button" id="quick-add-settings" title="更多设置">
-                    <span class="material-icons">settings</span>
-                  </button>
-                </div>
-              </div>
-              <!-- 任务设置下拉面板 -->
-              <div class="task-settings-panel" style="display: none;">
-                <div class="form-group">
-                  <label>优先级</label>
-                  <div class="input-wrapper">
-                    <div class="priority-buttons">
-                      <button type="button" class="priority-button" data-priority="0">
-                        <span class="material-icons">radio_button_unchecked</span>
-                        普通
-                      </button>
-                      <button type="button" class="priority-button" data-priority="1">
-                        <span class="material-icons">radio_button_unchecked</span>
-                        低
-                      </button>
-                      <button type="button" class="priority-button" data-priority="3">
-                        <span class="material-icons">radio_button_unchecked</span>
-                        中
-                      </button>
-                      <button type="button" class="priority-button" data-priority="5">
-                        <span class="material-icons">radio_button_unchecked</span>
-                        高
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="quick-add-due-date">截止日期</label>
-                  <div class="input-wrapper">
-                    <input type="datetime-local" id="quick-add-due-date">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="quick-add-tags">标签</label>
-                  <div class="input-wrapper">
-                    <input type="text" id="quick-add-tags" placeholder="用英文逗号分隔多个标签">
-                  </div>
-                </div>
-                <div class="form-actions">
-                  <button class="primary-button" id="save-quick-task">保存</button>
-                  <button class="secondary-button" id="cancel-quick-task">取消</button>
-                </div>
+          <!-- 快速创建任务输入框 -->
+          <div class="quick-add-task" style="display: none;">
+            <div class="quick-add-input-wrapper">
+              <input type="text" id="quick-add-input" placeholder="输入任务标题，按回车创建">
+              <div class="quick-add-actions">
+                <button class="icon-button" id="quick-add-settings" title="更多设置">
+                  <span class="material-icons">settings</span>
+                </button>
               </div>
             </div>
-
-            <h3 class="list-title">
-              进行中
-              <span class="count" id="active-count">0</span>
-            </h3>
-            <div id="todo-list"></div>
-            <div id="todo-empty" style="display: none;">
-              <p>当前项目暂无任务</p>
+            <!-- 任务设置下拉面板 -->
+            <div class="task-settings-panel" style="display: none;">
+              <div class="form-group">
+                <label>优先级</label>
+                <div class="input-wrapper">
+                  <div class="priority-buttons">
+                    <button type="button" class="priority-button" data-priority="0">
+                      <span class="material-icons">radio_button_unchecked</span>
+                      普通
+                    </button>
+                    <button type="button" class="priority-button" data-priority="1">
+                      <span class="material-icons">radio_button_unchecked</span>
+                      低
+                    </button>
+                    <button type="button" class="priority-button" data-priority="3">
+                      <span class="material-icons">radio_button_unchecked</span>
+                      中
+                    </button>
+                    <button type="button" class="priority-button" data-priority="5">
+                      <span class="material-icons">radio_button_unchecked</span>
+                      高
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="quick-add-due-date">截止日期</label>
+                <div class="input-wrapper">
+                  <input type="datetime-local" id="quick-add-due-date">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="quick-add-tags">标签</label>
+                <div class="input-wrapper">
+                  <input type="text" id="quick-add-tags" placeholder="用英文逗号分隔多个标签">
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="primary-button" id="save-quick-task">保存</button>
+                <button class="secondary-button" id="cancel-quick-task">取消</button>
+              </div>
             </div>
           </div>
 
-          <!-- 已完成任务列表 -->
-          <div class="completed-list-container">
-            <h3 class="list-title">
-              已完成
-              <span class="count" id="completed-count">0</span>
-            </h3>
-            <div id="completed-list"></div>
+          <h3 class="list-title">
+            进行中
+            <span class="count" id="active-count">0</span>
+          </h3>
+          <div id="todo-list"></div>
+          <div id="todo-empty" style="display: none;">
+            <p>当前项目暂无任务</p>
           </div>
         </div>
-      </div>
-      <div class="bookmarks-container">
-        <div id="folder-name" class="folder-name">
-        </div>
-        <div class="flex flex-wrap gap-4 justify-center flex-grow" id="bookmarks-list">
-          <!-- 添加占位符 -->
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
-          <div class="bookmark-placeholder"></div>
+
+        <!-- 已完成任务列表 -->
+        <div class="completed-list-container">
+          <h3 class="list-title">
+            已完成
+            <span class="count" id="completed-count">0</span>
+          </h3>
+          <div id="completed-list"></div>
         </div>
       </div>
-    </main>
-  </div>
+    </div>
+    <div class="bookmarks-container">
+      <div id="folder-name" class="folder-name">
+      </div>
+      <div class="flex flex-wrap gap-4 justify-center flex-grow" id="bookmarks-list">
+        <!-- 添加占位符 -->
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+        <div class="bookmark-placeholder"></div>
+      </div>
+    </div>
+  </main>
   <div id="more-button-toast" class="toast">
     <p data-i18n="moreSearchSupportToast">更多搜索支持正在开发中...</p>
   </div>
@@ -240,59 +231,36 @@
   <script src="background.js"></script>
   <script src="qrcode.min.js"></script>
   <script type="module" src="todo.js"></script>
-<!-- <div class="links-icons">
-  <a href="#history" id="history-link" data-i18n-title="historyLinkTitle">
-    <span class="material-icons">history</span>
-  </a>
-  <a href="#downloads" id="downloads-link" data-i18n-title="downloadsLinkTitle">
-    <span class="material-icons">download</span>
-  </a>
-  <a href="#passwords" id="passwords-link" data-i18n-title="passwordsLinkTitle">
-    <span class="material-icons">vpn_key</span>
-  </a>
-  <a href="#extensions" id="extensions-link" data-i18n-title="extensionsLinkTitle">
-    <span class="material-icons">extension</span>
-  </a>
-</div> -->
-<div class="settings-icon">
-  <a href="#settings" id="settings-link" data-i18n-title="settingsLinkTitle">
-    <span class="material-icons">settings</span>
-  </a>
-</div>
-<!-- 在 body 标签结束前添加 -->
-<div id="settings-modal" class="settings-modal">
-  <div class="settings-modal-content">
-    <span class="settings-modal-close">&times;</span>
-    <h2 class="settings-modal-title" data-i18n="settingsTitle">设置</h2>
-    <div class="settings-layout">
-      <div class="settings-sidebar">
-        <button class="settings-tab-button active" data-tab="appearance" data-i18n="appearanceTab">外观</button>
-      </div>
-      <div class="settings-content">
-        <div id="appearance-settings" class="settings-tab-content active">
-          <h3 class="settings-modal-subtitle" data-i18n="backgroundColorTitle">背景颜色</h3>
-          <div class="settings-background-options">
-            <div class="settings-bg-option gradient-background-1" data-bg="gradient-background-1"></div>
-            <div class="settings-bg-option gradient-background-2" data-bg="gradient-background-2"></div>
-            <div class="settings-bg-option gradient-background-3" data-bg="gradient-background-3"></div>
-            <div class="settings-bg-option gradient-background-4" data-bg="gradient-background-4"></div>
-            <div class="settings-bg-option gradient-background-5" data-bg="gradient-background-5"></div>
-            <div class="settings-bg-option gradient-background-6" data-bg="gradient-background-6"></div>
-            <div class="settings-bg-option gradient-background-7" data-bg="gradient-background-7"></div>
+  <div id="settings-modal" class="settings-modal">
+    <div class="settings-modal-content">
+      <span class="settings-modal-close">&times;</span>
+      <h2 class="settings-modal-title" data-i18n="settingsTitle">设置</h2>
+      <div class="settings-layout">
+        <div class="settings-sidebar">
+          <button class="settings-tab-button active" data-tab="appearance" data-i18n="appearanceTab">外观</button>
+        </div>
+        <div class="settings-content">
+          <div id="appearance-settings" class="settings-tab-content active">
+            <h3 class="settings-modal-subtitle" data-i18n="backgroundColorTitle">背景颜色</h3>
+            <div class="settings-background-options">
+              <div class="settings-bg-option gradient-background-1" data-bg="gradient-background-1"></div>
+              <div class="settings-bg-option gradient-background-2" data-bg="gradient-background-2"></div>
+              <div class="settings-bg-option gradient-background-3" data-bg="gradient-background-3"></div>
+              <div class="settings-bg-option gradient-background-4" data-bg="gradient-background-4"></div>
+              <div class="settings-bg-option gradient-background-5" data-bg="gradient-background-5"></div>
+              <div class="settings-bg-option gradient-background-6" data-bg="gradient-background-6"></div>
+              <div class="settings-bg-option gradient-background-7" data-bg="gradient-background-7"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-  <button id="toggle-sidebar" class="bg-gray-300 p-1 rounded-r-md">
-    &gt;
-  </button>
   <div id="confirm-dialog" class="modal">
     <div class="modal-content">
       <h2 id="confirm-dialog-title" data-i18n="confirmDeleteTitle">确认删除</h2>
       <p id="confirm-dialog-message"></p>
-      <p id="confirm-delete-quick-link-message"></p> <!-- 新增的元素 -->
+      <p id="confirm-delete-quick-link-message"></p>
       <div class="buttons">
         <button id="cancel-delete-button" class="cancel-button" data-i18n="cancelButton">取消</button>
         <button id="confirm-delete-button" class="delete-button" data-i18n="confirmDeleteButton">删除</button>

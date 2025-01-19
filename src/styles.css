@@ -86,14 +86,14 @@
 /* 待办事项区域样式 */
 .todo-section {
   position: relative;
-  max-width: 1200px; /* 减小最大宽度 */
-  width: 95%; /* 设置百分比宽度，保持两侧留白 */
+  max-width: 1200px;
+  width: 95%;
   margin: 1rem auto;
-  background: rgba(255, 255, 255, 0.95);
+  background: transparent; /* 修改为透明背景 */
   border-radius: 16px;
-  padding: 1.25rem; /* 稍微减小内边距 */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(8px);
+  padding: 1.25rem;
+  box-shadow: none; /* 移除阴影 */
+  backdrop-filter: none; /* 移除背景模糊效果 */
   height: calc(100vh - 180px);
   min-height: 600px;
   overflow: hidden;
@@ -130,12 +130,12 @@
 /* 项目列表容器 */
 .project-list-container {
   position: relative;
-  width: 200px; /* 减小宽度 */
+  width: 200px;
   min-width: 200px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.8); /* 修改为半透明背景 */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 14px; /* 减小内边距 */
+  padding: 14px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -147,12 +147,12 @@
 /* 任务列表容器 */
 .todo-list-container {
   position: relative;
-  flex: 2; /* 调整比例 */
-  background: #fff;
+  flex: 2;
+  background: rgba(255, 255, 255, 0.8); /* 修改为半透明背景 */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 14px;
-  min-width: 400px; /* 减小最小宽度 */
+  min-width: 400px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -164,12 +164,12 @@
 /* 已完成任务列表容器 */
 .completed-list-container {
   position: relative;
-  flex: 1.5; /* 调整比例 */
-  background: #fff;
+  flex: 1.5;
+  background: rgba(255, 255, 255, 0.8); /* 修改为半透明背景 */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 14px;
-  min-width: 300px; /* 减小最小宽度 */
+  min-width: 300px;
   opacity: 0.95;
   overflow-y: auto;
   display: flex;
@@ -1111,42 +1111,6 @@
   transition: all 0.3s ease;
 }
 
-/* 设置按钮优化 */
-.settings-icon {
-  position: fixed;
-  top: calc(55% + 26px);
-  right: 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-}
-
-.settings-icon:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-.settings-icon a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4b5563;
-  text-decoration: none;
-  font-size: 18px;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-  margin: 6px;
-  padding: 8px;
-}
-
-.settings-icon a:hover {
-  color: #10b981;
-  background: rgba(238, 238, 238, 0.8);
-  transform: scale(1.1);
-}
-
 /* 背景渐变优化 */
 html.gradient-background-1 {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -1571,4 +1535,48 @@ html.gradient-background-5 {
 .tags-tooltip .tag-item:hover {
   opacity: 0.9;
   transform: translateY(-1px);
+}
+
+/* 空白区域右键菜单样式 */
+.blank-context-menu {
+  position: fixed;
+  z-index: 1000;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  min-width: 200px;
+  display: none;
+}
+
+.blank-context-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #333;
+  font-size: 14px;
+}
+
+.blank-context-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.blank-context-menu-item .material-icons {
+  margin-right: 8px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* 分隔线样式 */
+.blank-context-menu-divider {
+  height: 1px;
+  background-color: #e5e5e5;
+  margin: 4px 0;
+}
+
+/* 保留设置模态框样式 */
+.settings-modal {
+  // ... existing code ...
 }

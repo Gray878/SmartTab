@@ -140,6 +140,165 @@ document.addEventListener('DOMContentLoaded', function () {
   updateSidebarDefaultBookmarkIndicator();
 
   // ... 其他代码 ...
+
+  // 添加全局右键菜单事件
+  document.addEventListener('contextmenu', function (event) {
+    const targetCard = event.target.closest('.bookmark-card');
+    const targetContextMenu = event.target.closest('.custom-context-menu');
+    const targetSettingsModal = event.target.closest('.settings-modal-content');
+    
+    // 如果点击的是书签卡片或已有的右键菜单或设置模态框，不处理
+    if (targetCard || targetContextMenu || targetSettingsModal) {
+      return;
+    }
+
+    // 阻止默认右键菜单
+    event.preventDefault();
+
+    // 移除任何已存在的右键菜单
+    const existingMenu = document.querySelector('.custom-context-menu');
+    if (existingMenu) {
+      existingMenu.remove();
+    }
+
+    // 创建自定义右键菜单
+    const contextMenu = document.createElement('div');
+    contextMenu.className = 'custom-context-menu';
+
+    // 添加设置菜单项
+    const settingsMenuItem = document.createElement('div');
+    settingsMenuItem.className = 'custom-context-menu-item';
+    
+    const settingsIcon = document.createElement('span');
+    settingsIcon.className = 'material-icons';
+    settingsIcon.textContent = 'settings';
+    settingsIcon.style.marginRight = '8px';
+    settingsIcon.style.fontSize = '18px';
+    
+    const settingsText = document.createElement('span');
+    settingsText.textContent = '设置';
+
+    settingsMenuItem.appendChild(settingsIcon);
+    settingsMenuItem.appendChild(settingsText);
+
+    settingsMenuItem.addEventListener('click', function() {
+      openSettingsModal();
+      contextMenu.style.display = 'none';
+    });
+
+    contextMenu.appendChild(settingsMenuItem);
+
+    // 设置菜单位置
+    contextMenu.style.display = 'block';
+    contextMenu.style.left = `${event.clientX}px`;
+    contextMenu.style.top = `${event.clientY}px`;
+
+    document.body.appendChild(contextMenu);
+  });
+
+  function setupContextMenus() {
+    // 创建空白区域右键菜单
+    function createBlankContextMenu() {
+      const menu = document.createElement('div');
+      menu.className = 'blank-context-menu';
+      document.body.appendChild(menu);
+
+      // 添加设置菜单项
+      const settingsItem = document.createElement('div');
+      settingsItem.className = 'blank-context-menu-item';
+      
+      const settingsIcon = document.createElement('span');
+      settingsIcon.className = 'material-icons';
+      settingsIcon.textContent = 'settings';
+      
+      const settingsText = document.createElement('span');
+      settingsText.textContent = '设置';
+
+      settingsItem.appendChild(settingsIcon);
+      settingsItem.appendChild(settingsText);
+      menu.appendChild(settingsItem);
+
+      // 点击设置项打开设置面板
+      settingsItem.addEventListener('click', () => {
+        openSettingsModal();
+        menu.style.display = 'none';
+      });
+
+      return menu;
+    }
+
+    const blankContextMenu = createBlankContextMenu();
+
+    // 监听右键点击事件
+    document.addEventListener('contextmenu', function(event) {
+      const targetCard = event.target.closest('.bookmark-card');
+      const targetContextMenu = event.target.closest('.blank-context-menu, .custom-context-menu');
+      const targetSettingsModal = event.target.closest('.settings-modal-content');
+      
+      // 如果点击的是书签卡片、已有的右键菜单或设置模态框，不处理
+      if (targetCard || targetContextMenu || targetSettingsModal) {
+        return;
+      }
+
+      // 阻止默认右键菜单
+      event.preventDefault();
+
+      // 显示自定义右键菜单
+      blankContextMenu.style.display = 'block';
+      blankContextMenu.style.left = `${event.clientX}px`;
+      blankContextMenu.style.top = `${event.clientY}px`;
+
+      // 确保菜单不超出视窗
+      const rect = blankContextMenu.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        blankContextMenu.style.left = `${window.innerWidth - rect.width}px`;
+      }
+      if (rect.bottom > window.innerHeight) {
+        blankContextMenu.style.top = `${window.innerHeight - rect.height}px`;
+      }
+    });
+
+    // 点击其他区域关闭菜单
+    document.addEventListener('click', function() {
+      blankContextMenu.style.display = 'none';
+    });
+  }
+
+  // 在 DOMContentLoaded 事件中初始化
+  document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+    setupContextMenus();
+    // ... existing code ...
+  });
+
+  // ... existing code ...
+  createBookmarkFolderContextMenu();
+  
+  // 获取模态对话框元素
+  const settingsModal = document.getElementById('settings-modal');
+  const closeButton = document.querySelector('.settings-modal-close');
+  const tabButtons = document.querySelectorAll('.settings-tab-button');
+  const tabContents = document.querySelectorAll('.settings-tab-content');
+  const bgOptions = document.querySelectorAll('.settings-bg-option');
+
+  // 移除原有的设置按钮点击事件代码
+  // settingsIcon.addEventListener('click', function (e) {
+  //   e.preventDefault();
+  //   settingsModal.style.display = 'block';
+  // });
+
+  // 关闭设置模态框
+  closeButton.addEventListener('click', function () {
+    settingsModal.style.display = 'none';
+  });
+
+  // 点击模态框外部关闭
+  window.addEventListener('click', function (e) {
+    if (e.target === settingsModal) {
+      settingsModal.style.display = 'none';
+    }
+  });
+  // ... existing code ...
 });
 
 function showMovingFeedback(element) {
@@ -407,31 +566,17 @@ function navigateToPath(path) {
 
 function displayBookmarks(bookmark) {
   const bookmarksList = document.getElementById('bookmarks-list');
-  if (!bookmarksList) {
-    return;
-  }
-
-  const fragment = document.createDocumentFragment();
-  
-  let itemsToDisplay = bookmark.children || [];
-  
-  itemsToDisplay.sort((a, b) => a.index - b.index);
-  
-  itemsToDisplay.forEach((child) => {
-    if (child.url) {
-      const card = createBookmarkCard(child, child.index);
-      fragment.appendChild(card);
-    } else {
-      const folderCard = createFolderCard(child, child.index);
-      fragment.appendChild(folderCard);
-    }
-  });
-  
   bookmarksList.innerHTML = '';
-  bookmarksList.appendChild(fragment);
-  bookmarksList.dataset.parentId = bookmark.id;
   
-  setupSortable();
+  if (bookmark.children) {
+    bookmark.children.forEach((child, index) => {
+      if (child.url) {
+        bookmarksList.appendChild(createBookmarkCard(child, index));
+      } else if (child.children) {
+        bookmarksList.appendChild(createFolderCard(child, index));
+      }
+    });
+  }
 }
 
 function getColors(img) {
@@ -1387,18 +1532,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // ... 其他初始化代码 ...
   createBookmarkFolderContextMenu();
   // 获取模态对话框元素
-  const settingsIcon = document.querySelector('.settings-icon a');
   const settingsModal = document.getElementById('settings-modal');
   const closeButton = document.querySelector('.settings-modal-close');
   const tabButtons = document.querySelectorAll('.settings-tab-button');
   const tabContents = document.querySelectorAll('.settings-tab-content');
   const bgOptions = document.querySelectorAll('.settings-bg-option');
-
-  // 打开设置模态框
-  settingsIcon.addEventListener('click', function (e) {
-    e.preventDefault();
-    settingsModal.style.display = 'block';
-  });
 
   // 关闭设置模态框
   closeButton.addEventListener('click', function () {
