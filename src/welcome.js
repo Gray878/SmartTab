@@ -1,4 +1,4 @@
-let userName = localStorage.getItem('userName') || 'Orion Wang'; // 从 localStorage 获取用户名，默认值为 'Orion Wang'
+let userName = localStorage.getItem('userName') || 'Gray'; // 从 localStorage 获取用户名，默认值为 'Gray'
 
 function updateWelcomeMessage() {
   const now = new Date();

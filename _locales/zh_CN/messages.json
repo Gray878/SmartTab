@@ -282,5 +282,11 @@
     "yearProgress": {
         "message": "年进度",
         "description": "年进度显示"
+    },
+    "shortcutsTab": {
+        "message": "快捷键"
+    },
+    "settingsTitle": {
+        "message": "设置"
     }
 }

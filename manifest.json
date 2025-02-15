@@ -8,8 +8,6 @@
     "newtab": "src/index.html"
   },
   "permissions": [
-    "bookmarks",
-    "favicon",
     "storage",
     "tabs",
     "identity"

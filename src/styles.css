@@ -801,58 +801,76 @@
 
 /* 自定义复选框样式 */
 .todo-item input[type="checkbox"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   width: 18px;
   height: 18px;
   border: 2px solid #ddd;
   border-radius: 4px;
-  margin-right: 12px;
-  position: relative;
   cursor: pointer;
+  position: relative;
   transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  flex-shrink: 0;
 }
 
 /* 不同优先级的复选框边框颜色 */
 .todo-item.priority-0 input[type="checkbox"] {
-  border-color: #4caf50; /* 普通优先级 - 绿色 */
+  border-color: #4CAF50; /* 普通 - 绿色 */
 }
 
 .todo-item.priority-1 input[type="checkbox"] {
-  border-color: #2196F3; /* 低优先级 - 蓝色 */
+  border-color: #2196F3; /* 低 - 蓝色 */
 }
 
 .todo-item.priority-3 input[type="checkbox"] {
-  border-color: #ff9800; /* 中优先级 - 橙色 */
+  border-color: #FF9800; /* 中 - 橙色 */
 }
 
 .todo-item.priority-5 input[type="checkbox"] {
-  border-color: #f44336; /* 高优先级 - 红色 */
+  border-color: #F44336; /* 高 - 红色 */
 }
 
-/* 选中状态的样式 */
-.todo-item input[type="checkbox"]:checked {
-  background-color: currentColor;
-  border-color: currentColor;
+/* 复选框选中状态 - 根据优先级显示不同的背景色 */
+.todo-item.priority-0 input[type="checkbox"]:checked {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
 }
 
-.todo-item input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 2px;
-  width: 4px;
-  height: 8px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+.todo-item.priority-1 input[type="checkbox"]:checked {
+  background-color: #2196F3;
+  border-color: #2196F3;
 }
 
-/* 悬停效果 */
-.todo-item input[type="checkbox"]:hover {
-  border-width: 2px;
-  transform: scale(1.1);
+.todo-item.priority-3 input[type="checkbox"]:checked {
+  background-color: #FF9800;
+  border-color: #FF9800;
+}
+
+.todo-item.priority-5 input[type="checkbox"]:checked {
+  background-color: #F44336;
+  border-color: #F44336;
+}
+
+/* 复选框悬停效果 - 根据优先级显示不同的悬停颜色 */
+.todo-item.priority-0 input[type="checkbox"]:hover {
+  border-color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.todo-item.priority-1 input[type="checkbox"]:hover {
+  border-color: #2196F3;
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.todo-item.priority-3 input[type="checkbox"]:hover {
+  border-color: #FF9800;
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.todo-item.priority-5 input[type="checkbox"]:hover {
+  border-color: #F44336;
+  background-color: rgba(244, 67, 54, 0.1);
 }
 
 /* 已完成任务的标签样式 */
@@ -1421,43 +1439,61 @@ html.gradient-background-5 {
 
 /* 不同优先级的复选框边框颜色 */
 .todo-item.priority-0 input[type="checkbox"] {
-  border-color: #ddd;
+  border-color: #4CAF50; /* 普通 - 绿色 */
 }
 
 .todo-item.priority-1 input[type="checkbox"] {
-  border-color: #4caf50;
+  border-color: #2196F3; /* 低 - 蓝色 */
 }
 
 .todo-item.priority-3 input[type="checkbox"] {
-  border-color: #ff9800;
+  border-color: #FF9800; /* 中 - 橙色 */
 }
 
 .todo-item.priority-5 input[type="checkbox"] {
-  border-color: #f44336;
+  border-color: #F44336; /* 高 - 红色 */
 }
 
-/* 复选框选中状态 */
-.todo-item input[type="checkbox"]:checked {
-  background-color: #4a90e2;
-  border-color: #4a90e2;
+/* 复选框选中状态 - 根据优先级显示不同的背景色 */
+.todo-item.priority-0 input[type="checkbox"]:checked {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
 }
 
-.todo-item input[type="checkbox"]:checked::after {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 2px;
-  width: 6px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+.todo-item.priority-1 input[type="checkbox"]:checked {
+  background-color: #2196F3;
+  border-color: #2196F3;
 }
 
-/* 复选框悬停效果 */
-.todo-item input[type="checkbox"]:hover {
-  border-color: #4a90e2;
-  background-color: rgba(74, 144, 226, 0.1);
+.todo-item.priority-3 input[type="checkbox"]:checked {
+  background-color: #FF9800;
+  border-color: #FF9800;
+}
+
+.todo-item.priority-5 input[type="checkbox"]:checked {
+  background-color: #F44336;
+  border-color: #F44336;
+}
+
+/* 复选框悬停效果 - 根据优先级显示不同的悬停颜色 */
+.todo-item.priority-0 input[type="checkbox"]:hover {
+  border-color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.todo-item.priority-1 input[type="checkbox"]:hover {
+  border-color: #2196F3;
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+.todo-item.priority-3 input[type="checkbox"]:hover {
+  border-color: #FF9800;
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.todo-item.priority-5 input[type="checkbox"]:hover {
+  border-color: #F44336;
+  background-color: rgba(244, 67, 54, 0.1);
 }
 
 /* 标签悬停效果 */
@@ -1579,4 +1615,133 @@ html.gradient-background-5 {
 /* 保留设置模态框样式 */
 .settings-modal {
   // ... existing code ...
+}
+
+/* 设置模态框内容区域样式 */
+.settings-modal-content {
+  position: relative;
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* 快捷键设置面板样式 */
+.shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-right: 16px; /* 添加右侧内边距，避免滚动条遮挡 */
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f5f5f5;
+  min-height: 40px;
+}
+
+.shortcut-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0; /* 防止输入框被压缩 */
+}
+
+.shortcut-input {
+  width: 120px; /* 调整输入框宽度 */
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.shortcut-input.recording {
+  background: #e6f4ff;
+  border-color: #1890ff;
+}
+
+.reset-shortcut {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: #ff4d4f;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.reset-shortcut:hover {
+  background: #ff7875;
+}
+
+.shortcuts-tip {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fffbe6;
+  border: 1px solid #ffe58f;
+  border-radius: 4px;
+}
+
+.shortcuts-tip p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* 自定义壁纸相关样式 */
+.custom-wallpaper-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.wallpaper-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.wallpaper-tip {
+  margin-top: 8px;
+  color: #666;
+  font-size: 13px;
+}
+
+/* 自定义背景图片样式 */
+.custom-wallpaper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}
+
+/* 背景图片暗色遮罩 */
+.wallpaper-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+/* 当使用自定义壁纸时显示遮罩 */
+body.has-custom-wallpaper .wallpaper-overlay {
+  display: block;
 }
