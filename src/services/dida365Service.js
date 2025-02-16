@@ -442,4 +442,73 @@ export class Dida365Service {
       throw error;
     }
   }
+
+  // 创建项目
+  async createProject(projectData) {
+    try {
+      const response = await fetch(`${this.openApiBase}/project`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.accessToken}`
+        },
+        body: JSON.stringify({
+          name: projectData.name,
+          color: projectData.color || '#F18181',
+          viewMode: projectData.viewMode || 'list',
+          kind: projectData.kind || 'task'
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('创建项目失败');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('创建项目时出错:', error);
+      throw error;
+    }
+  }
+
+  // 更新项目
+  async updateProject(projectId, projectData) {
+    try {
+      const response = await fetch(`${this.openApiBase}/project/${projectId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.accessToken}`
+        },
+        body: JSON.stringify(projectData)
+      });
+      
+      if (!response.ok) {
+        throw new Error('更新项目失败');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('更新项目时出错:', error);
+      throw error;
+    }
+  }
+
+  // 删除项目
+  async deleteProject(projectId) {
+    try {
+      const response = await fetch(`${this.openApiBase}/project/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${this.accessToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('删除项目失败');
+      }
+      return true;
+    } catch (error) {
+      console.error('删除项目时出错:', error);
+      throw error;
+    }
+  }
 } 

@@ -112,8 +112,15 @@
       <div class="todo-content" style="display: none;">
         <!-- 项目列表 -->
         <div class="project-list-container">
-          <h2 class="list-title">项目列表</h2>
-          <div id="project-list"></div>
+          <div class="list-title">
+            <span>项目列表</span>
+            <button id="add-project-btn" class="icon-button" title="添加项目">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+          <div id="project-list">
+            <!-- 项目列表将通过 JavaScript 动态添加 -->
+          </div>
         </div>
         
         <!-- 进行中任务列表 -->

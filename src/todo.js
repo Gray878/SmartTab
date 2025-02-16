@@ -30,6 +30,25 @@ class TodoManager {
     requestAnimationFrame(() => {
       this.init();
     });
+
+    // 添加项目管理相关的事件监听
+    const addProjectBtn = document.getElementById('add-project-btn');
+    if (addProjectBtn) {
+      addProjectBtn.addEventListener('click', () => this.createProject());
+    }
+
+    // 为项目列表添加右键菜单
+    const projectList = document.getElementById('project-list');
+    if (projectList) {
+      projectList.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const projectItem = e.target.closest('.project-item');
+        if (!projectItem) return;
+
+        const projectId = projectItem.dataset.projectId;
+        this.showProjectContextMenu(e, projectId);
+      });
+    }
   }
 
   initializeElements() {
@@ -134,7 +153,7 @@ class TodoManager {
   async loadProjects() {
     try {
       const projects = await this.didaService.getProjects();
-      await this.renderProjectList(projects);
+      await this.renderProjects(projects);
     } catch (error) {
       console.error('加载项目列表失败:', error);
       if (this.projectList) {
@@ -143,125 +162,78 @@ class TodoManager {
     }
   }
 
-  async renderProjectList(projects) {
+  async renderProjects(projects) {
     if (!this.projectList) return;
-
-    // 清空现有内容
+    
     this.projectList.innerHTML = '';
-
-    // 按sortOrder排序
-    const sortedProjects = [...projects].sort((a, b) => a.sortOrder - b.sortOrder);
-
-    // 渲染每个项目
-    sortedProjects.forEach(project => {
-      const projectItem = document.createElement('div');
-      projectItem.className = 'project-item';
-      projectItem.dataset.projectId = project.id;
-
-      // 解码项目名称中的表情符号
-      const decodedName = decodeURIComponent(JSON.parse(`"${project.name}"`));
-
-      projectItem.innerHTML = `
-        <span class="material-icons">folder</span>
-        <span class="project-name">${decodedName}</span>
-        <span class="project-task-count"></span>
+    
+    projects.forEach(project => {
+      const projectElement = document.createElement('div');
+      projectElement.className = 'project-item';
+      projectElement.dataset.projectId = project.id;
+      
+      // 创建项目图标
+      const iconHtml = project.kind === 'FOLDER' ? 
+        '<span class="material-icons project-icon">folder</span>' :
+        '<span class="material-icons project-icon">list</span>';
+      
+      projectElement.innerHTML = `
+        ${iconHtml}
+        <span class="project-name">${project.name}</span>
+        <span class="project-count">0</span>
       `;
-
-      // 添加点击事件
-      projectItem.addEventListener('click', () => {
-        // 移除其他项目的active类
-        document.querySelectorAll('.project-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        
-        // 添加active类到当前项目
-        projectItem.classList.add('active');
-        
-        // 更新当前项目名称
-        if (this.currentProjectName) {
-          this.currentProjectName.textContent = decodedName;
-        }
-        
-        // 启用添加任务按钮
-        if (this.addTodoButton) {
-          this.addTodoButton.disabled = false;
-        }
-        
-        // 隐藏空状态提示
-        if (this.todoEmpty) {
-          this.todoEmpty.style.display = 'none';
-        }
-        
-        // 加载项目任务
-        this.loadProjectTasks(project.id);
+      
+      // 添加点击事件，切换到该项目
+      projectElement.addEventListener('click', () => {
+        this.selectProject(project.id);
       });
-
-      this.projectList.appendChild(projectItem);
+      
+      this.projectList.appendChild(projectElement);
     });
 
-    // 如果有项目，默认选中第一个
-    if (sortedProjects.length > 0) {
-      const firstProject = this.projectList.firstElementChild;
-      if (firstProject) {
-        firstProject.click();
+    // 更新所有项目的任务计数
+    for (const project of projects) {
+      try {
+        const projectData = await this.didaService.getProjectData(project.id);
+        const activeTasks = (projectData.tasks || []).filter(task => task.status !== 2);
+        this.updateTaskCount(project.id, activeTasks.length);
+      } catch (error) {
+        console.error(`获取项目 ${project.id} 的任务数量失败:`, error);
       }
+    }
+
+    // 如果有项目，默认选中第一个
+    if (projects.length > 0) {
+      const firstProject = projects[0];
+      await this.selectProject(firstProject.id);
     }
   }
 
   async loadProjectTasks(projectId) {
-    if (!this.todoList) return;
-
     try {
-      // 显示加载状态
-      this.todoList.innerHTML = '<div class="loading">加载中...</div>';
-      const completedList = document.getElementById('completed-list');
-      if (completedList) {
-        completedList.innerHTML = '<div class="loading">加载中...</div>';
-      }
-      
-      // 获取项目数据
       const projectData = await this.didaService.getProjectData(projectId);
+      const tasks = projectData.tasks || [];
       
-      if (projectData && Array.isArray(projectData.tasks)) {
-        // 分离进行中和已完成的任务
-        const activeTasks = projectData.tasks.filter(task => task.status !== 2);
-        const completedTasks = projectData.tasks.filter(task => task.status === 2);
-        
-        // 更新任务统计
-        const projectTitle = document.querySelector('#current-project-name .project-title');
-        const taskCount = document.querySelector('#current-project-name .task-count');
-        const activeCount = document.getElementById('active-count');
-        const completedCount = document.getElementById('completed-count');
-        
-        if (projectTitle) {
-          projectTitle.textContent = projectData.project?.name || '未命名项目';
-        }
+      // 分离进行中和已完成的任务
+      const activeTasks = tasks.filter(task => task.status !== 2);
+      const completedTasks = tasks.filter(task => task.status === 2);
+      
+      // 更新任务计数
+      this.updateTaskCount(projectId, activeTasks.length);
+      
+      // 更新当前项目标题中的任务计数
+      if (this.currentProjectName) {
+        const taskCount = this.currentProjectName.querySelector('.task-count');
         if (taskCount) {
-          taskCount.textContent = `(${projectData.tasks.length})`;
-        }
-        if (activeCount) {
-          activeCount.textContent = activeTasks.length;
-        }
-        if (completedCount) {
-          completedCount.textContent = completedTasks.length;
-        }
-        
-        // 渲染任务列表
-        this.renderTasks(activeTasks, 'todo-list');
-        this.renderTasks(completedTasks, 'completed-list', true);
-      } else {
-        this.todoList.innerHTML = '<div class="no-tasks">暂无任务</div>';
-        if (completedList) {
-          completedList.innerHTML = '<div class="no-tasks">暂无已完成任务</div>';
+          taskCount.textContent = `${activeTasks.length} 个任务`;
         }
       }
+      
+      // 渲染任务列表
+      this.renderTasks(activeTasks, 'todo-list');
+      this.renderTasks(completedTasks, 'completed-list', true);
     } catch (error) {
-      console.error('加载项目任务失败:', error);
-      this.todoList.innerHTML = '<div class="error">加载失败</div>';
-      const completedList = document.getElementById('completed-list');
-      if (completedList) {
-        completedList.innerHTML = '<div class="error">加载失败</div>';
-      }
+      this.showErrorMessage('加载任务失败: ' + error.message);
     }
   }
 
@@ -376,13 +348,16 @@ class TodoManager {
         return colors[Math.abs(hash) % colors.length];
       };
 
+      // 检查任务是否过期
+      const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 2;
+
       taskElement.innerHTML = `
         <div class="priority-indicator priority-${priorityClass}"></div>
         <input type="checkbox" ${task.status === 2 ? 'checked' : ''}>
         <div class="todo-item-content">
           <div class="todo-item-title">${task.title}</div>
           <div class="todo-item-meta">
-            ${task.dueDate ? `<span class="due-date">${formatDate(task.dueDate)}</span>` : ''}
+            ${task.dueDate ? `<span class="due-date ${isOverdue ? 'overdue' : ''}">${formatDate(task.dueDate)}</span>` : ''}
             ${task.tags && task.tags.length > 0 ? renderTags(task.tags) : ''}
           </div>
         </div>
@@ -948,6 +923,193 @@ class TodoManager {
   getSelectedPriority(container) {
     const selectedButton = container.querySelector('.priority-button.selected');
     return selectedButton ? parseInt(selectedButton.dataset.priority) : 0;
+  }
+
+  // 创建新项目
+  async createProject() {
+    try {
+      // 检查是否已登录
+      if (!this.didaService.accessToken) {
+        this.showErrorMessage('请先登录滴答清单');
+        return;
+      }
+
+      const projectName = prompt('请输入项目名称:');
+      if (!projectName) return;
+
+      const projectData = {
+        name: projectName,
+        color: '#F18181',
+        viewMode: 'list',
+        kind: 'task'
+      };
+
+      const newProject = await this.didaService.createProject(projectData);
+      await this.refreshProjectList();
+      this.showSuccessMessage('项目创建成功');
+    } catch (error) {
+      this.showErrorMessage('创建项目失败: ' + error.message);
+    }
+  }
+
+  // 编辑项目
+  async editProject(projectId) {
+    try {
+      const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+      if (!projectItem) return;
+
+      const currentName = projectItem.querySelector('.project-name').textContent;
+      const newName = prompt('请输入新的项目名称:', currentName);
+      
+      if (!newName || newName === currentName) return;
+
+      const projectData = {
+        name: newName
+      };
+
+      await this.didaService.updateProject(projectId, projectData);
+      await this.refreshProjectList(); // 刷新项目列表
+      this.showSuccessMessage('项目更新成功');
+    } catch (error) {
+      this.showErrorMessage('更新项目失败: ' + error.message);
+    }
+  }
+
+  // 删除项目
+  async deleteProject(projectId) {
+    try {
+      const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+      if (!projectItem) return;
+
+      const projectName = projectItem.querySelector('.project-name').textContent;
+      if (!confirm(`确定要删除项目 "${projectName}" 吗？`)) return;
+
+      await this.didaService.deleteProject(projectId);
+      await this.refreshProjectList(); // 刷新项目列表
+      this.showSuccessMessage('项目删除成功');
+    } catch (error) {
+      this.showErrorMessage('删除项目失败: ' + error.message);
+    }
+  }
+
+  // 显示项目右键菜单
+  showProjectContextMenu(event, projectId) {
+    // 阻止事件冒泡和默认行为
+    event.preventDefault();
+    event.stopPropagation();
+
+    // 先移除所有已存在的上下文菜单
+    const existingMenus = document.querySelectorAll('.context-menu');
+    existingMenus.forEach(menu => menu.remove());
+
+    // 创建新的上下文菜单
+    const menu = document.createElement('div');
+    menu.className = 'context-menu';
+    menu.innerHTML = `
+      <div class="menu-item edit-project">编辑项目</div>
+      <div class="menu-item delete-project">删除项目</div>
+    `;
+
+    // 定位菜单
+    const rect = event.target.closest('.project-item').getBoundingClientRect();
+    menu.style.position = 'fixed';
+    menu.style.left = `${event.clientX}px`;
+    menu.style.top = `${event.clientY}px`;
+
+    // 确保菜单不会超出视窗
+    requestAnimationFrame(() => {
+      const menuRect = menu.getBoundingClientRect();
+      if (menuRect.right > window.innerWidth) {
+        menu.style.left = `${window.innerWidth - menuRect.width - 5}px`;
+      }
+      if (menuRect.bottom > window.innerHeight) {
+        menu.style.top = `${window.innerHeight - menuRect.height - 5}px`;
+      }
+    });
+
+    // 添加菜单项事件监听
+    menu.querySelector('.edit-project').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.editProject(projectId);
+      menu.remove();
+    });
+
+    menu.querySelector('.delete-project').addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.deleteProject(projectId);
+      menu.remove();
+    });
+
+    // 点击其他地方关闭菜单
+    const closeMenu = (e) => {
+      if (!menu.contains(e.target)) {
+        menu.remove();
+        document.removeEventListener('click', closeMenu);
+        document.removeEventListener('contextmenu', closeMenu);
+      }
+    };
+
+    document.addEventListener('click', closeMenu);
+    document.addEventListener('contextmenu', closeMenu);
+
+    // 添加菜单到文档
+    document.body.appendChild(menu);
+  }
+
+  // 刷新项目列表
+  async refreshProjectList() {
+    try {
+      const projects = await this.didaService.getProjects();
+      this.renderProjects(projects);
+    } catch (error) {
+      this.showErrorMessage('获取项目列表失败: ' + error.message);
+    }
+  }
+
+  // 选择项目
+  async selectProject(projectId) {
+    // 移除其他项目的选中状态
+    const projectItems = document.querySelectorAll('.project-item');
+    projectItems.forEach(item => item.classList.remove('active'));
+    
+    // 添加当前项目的选中状态
+    const currentProject = document.querySelector(`[data-project-id="${projectId}"]`);
+    if (currentProject) {
+      currentProject.classList.add('active');
+    }
+    
+    // 更新项目标题
+    const projectTitle = currentProject?.querySelector('.project-name')?.textContent || '';
+    if (this.currentProjectName) {
+      this.currentProjectName.querySelector('.project-title').textContent = projectTitle;
+    }
+    
+    // 显示快速添加任务输入框
+    if (this.quickAddTask) {
+      this.quickAddTask.style.display = 'block';
+    }
+    
+    // 加载项目任务
+    await this.loadProjectTasks(projectId);
+  }
+
+  // 更新任务计数
+  updateTaskCount(projectId, count) {
+    const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+    if (projectItem) {
+      const countElement = projectItem.querySelector('.project-count');
+      if (countElement) {
+        countElement.textContent = count;
+      }
+    }
+    
+    // 更新当前项目标题中的任务计数
+    if (this.currentProjectName) {
+      const taskCount = this.currentProjectName.querySelector('.task-count');
+      if (taskCount) {
+        taskCount.textContent = `${count} 个任务`;
+      }
+    }
   }
 }
 
