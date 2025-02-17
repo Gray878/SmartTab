@@ -25,10 +25,11 @@
     "http://*/*",
     "https://api.dida365.com/*",
     "https://dida365.com/*",
-    "https://*.chromiumapp.org/*"
+    "https://*.chromiumapp.org/*",
+    "https://v2.jinrishici.com/*"
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.dida365.com https://dida365.com;"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.dida365.com https://dida365.com https://v2.jinrishici.com;"
   },
   "action": {
     "default_icon": {

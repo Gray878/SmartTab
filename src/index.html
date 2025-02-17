@@ -15,7 +15,37 @@
 <body class="h-screen flex flex-col">
   <main class="flex-1 bg-gray-50 p-8 overflow-auto flex flex-col">
     <div class="welcome-search-container">
-      <div id="welcome-message" data-i18n="welcomeMessage"></div>
+      <div class="welcome-module">
+        <div id="welcome-message" class="welcome-item" data-style="basic"></div>
+        
+        <div id="clock-message" class="welcome-item" data-style="clock" style="display: none">
+          <div class="time"></div>
+          <div class="date"></div>
+        </div>
+        
+        <div id="poem-message" class="welcome-item" data-style="poem" style="display: none">
+          <div class="poem-content"></div>
+          <div class="poem-author"></div>
+          <div class="poem-source"></div>
+        </div>
+        
+        <div id="voyager-message" class="welcome-item" data-style="voyager" style="display: none">
+          <div class="voyager-distance"></div>
+        </div>
+        
+        <div id="year-progress" class="welcome-item" data-style="progress" style="display: none">
+          <div class="progress-text"></div>
+          <div class="progress-bar">
+            <div class="progress-inner"></div>
+          </div>
+          <div class="seasons" style="display: none;">
+            <div class="season" data-season="春">🌸</div>
+            <div class="season" data-season="夏">☀️</div>
+            <div class="season" data-season="秋">🍁</div>
+            <div class="season" data-season="冬">❄️</div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="flex justify-between items-center mb-4">
       <div class="search-container">
@@ -128,7 +158,6 @@
           <div class="todo-header">
             <h2 id="current-project-name">
               <span class="project-title"></span>
-              <span class="task-count"></span>
             </h2>
           </div>
           
@@ -186,10 +215,10 @@
             </div>
           </div>
 
-          <h3 class="list-title">
-            进行中
-            <span class="count" id="active-count">0</span>
-          </h3>
+          <div class="list-title">
+            <span>进行中</span>
+            <span class="active-count">0</span>
+          </div>
           <div id="todo-list"></div>
           <div id="todo-empty" style="display: none;">
             <p>当前项目暂无任务</p>
@@ -198,11 +227,49 @@
 
         <!-- 已完成任务列表 -->
         <div class="completed-list-container">
-          <h3 class="list-title">
-            已完成
-            <span class="count" id="completed-count">0</span>
-          </h3>
+          <div class="completed-list-title">
+            <div class="completed-title">
+              <span>已完成</span>
+              <span class="completed-count">0</span>
+            </div>
+          </div>
           <div id="completed-list"></div>
+        </div>
+      </div>
+      <div class="about-page" style="display: none;">
+        <div class="about-content">
+          <div class="about-header">
+            <img src="../images/icon-128.png" alt="插件图标" class="about-logo">
+            <h2>滴答清单 Chrome 扩展</h2>
+            <span class="version">v1.227</span>
+          </div>
+          
+          <div class="about-description">
+            <p>这是一个帮助你高效管理任务的 Chrome 扩展，支持与滴答清单同步，随时随地管理你的待办事项。</p>
+          </div>
+          
+          <div class="about-features">
+            <h3>主要功能</h3>
+            <ul>
+              <li>支持滴答清单账号同步</li>
+              <li>快速创建和管理任务</li>
+              <li>项目分类管理</li>
+              <li>任务优先级设置</li>
+              <li>截止日期提醒</li>
+              <li>标签管理</li>
+            </ul>
+          </div>
+          
+          <div class="about-actions">
+            <a href="https://wj.qq.com/s2/12345678/abcd" target="_blank" class="about-button feedback-button">
+              <span class="material-icons">feedback</span>
+              问题反馈
+            </a>
+            <a href="mailto:2371849349@qq.com?subject=滴答清单扩展反馈&body=请描述您遇到的问题或建议：" class="about-button contact-button">
+              <span class="material-icons">mail</span>
+              联系我们
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -224,6 +291,8 @@
           <div class="settings-sidebar">
             <button class="settings-tab-button active" data-tab="appearance">外观</button>
             <button class="settings-tab-button" data-tab="shortcuts">快捷键</button>
+            <button class="settings-tab-button" data-tab="donate">打赏支持</button>
+            <button class="settings-tab-button" data-tab="about">关于</button>
           </div>
           <div class="settings-content">
             <div id="appearance-settings" class="settings-tab-content active">
@@ -247,6 +316,31 @@
                   <button id="remove-wallpaper" class="secondary-button" style="display: none">移除壁纸</button>
                 </div>
                 <p class="wallpaper-tip">支持 jpg、png 格式的图片，建议分辨率不低于 1920×1080</p>
+              </div>
+              <div class="welcome-style-section">
+                <h3 class="settings-modal-subtitle">欢迎样式</h3>
+                <div class="welcome-style-options">
+                  <button class="welcome-style-option" data-style="basic">
+                    <span class="material-icons">waving_hand</span>
+                    <span>基础问候</span>
+                  </button>
+                  <button class="welcome-style-option" data-style="clock">
+                    <span class="material-icons">schedule</span>
+                    <span>时钟</span>
+                  </button>
+                  <button class="welcome-style-option" data-style="poem">
+                    <span class="material-icons">auto_stories</span>
+                    <span>每日诗词</span>
+                  </button>
+                  <button class="welcome-style-option" data-style="voyager">
+                    <span class="material-icons">rocket_launch</span>
+                    <span>旅行者1号</span>
+                  </button>
+                  <button class="welcome-style-option" data-style="progress">
+                    <span class="material-icons">timeline</span>
+                    <span>年度进度</span>
+                  </button>
+                </div>
               </div>
             </div>
             
@@ -306,6 +400,74 @@
               </div>
               <div class="shortcuts-tip">
                 <p>提示: 快捷键必须包含 Alt 键，可以与数字键或字母键组合</p>
+              </div>
+            </div>
+            
+            <!-- 添加打赏页面 -->
+            <div id="donate-settings" class="settings-tab-content">
+              <div class="donate-content">
+                <div class="donate-header">
+                  <h2>请作者喝杯咖啡</h2>
+                  <p class="donate-desc">如果这个扩展对你有帮助，欢迎打赏支持，让我能继续更新维护～</p>
+                </div>
+                
+                <div class="donate-methods">
+                  <div class="donate-method">
+                    <h3>支付宝</h3>
+                    <div class="qrcode-wrapper">
+                      <img src="https://hgh-typora-image.oss-cn-guangzhou.aliyuncs.com/img/c7f89fdb8e99ab996a6e1917bbb7645.jpg" alt="支付宝收款码" class="qrcode">
+                    </div>
+                  </div>
+                  
+                  <div class="donate-method">
+                    <h3>微信支付</h3>
+                    <div class="qrcode-wrapper">
+                      <img src="https://hgh-typora-image.oss-cn-guangzhou.aliyuncs.com/img/1cdc1f2d461b3308b1a74888c02e4f7.jpg" alt="微信收款码" class="qrcode">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="donate-footer">
+                  <p>感谢您的支持！</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 添加关于标签页 -->
+            <div id="about-settings" class="settings-tab-content">
+              <div class="about-content">
+                <div class="about-header">
+                  <img src="../images/icon-128.png" alt="插件图标" class="about-logo">
+                  <h2>滴答清单 Chrome 扩展</h2>
+                  <span class="version">v1.227</span>
+                </div>
+                
+                <div class="about-description">
+                  <p>这是一个帮助你高效管理任务的 Chrome 扩展，支持与滴答清单同步，随时随地管理你的待办事项。</p>
+                </div>
+                
+                <div class="about-features">
+                  <h3>主要功能</h3>
+                  <ul>
+                    <li>支持滴答清单账号同步</li>
+                    <li>快速创建和管理任务</li>
+                    <li>项目分类管理</li>
+                    <li>任务优先级设置</li>
+                    <li>截止日期提醒</li>
+                    <li>标签管理</li>
+                  </ul>
+                </div>
+                
+                <div class="about-actions">
+                  <a href="https://wj.qq.com/s2/12345678/abcd" target="_blank" class="about-button feedback-button">
+                    <span class="material-icons">feedback</span>
+                    问题反馈
+                  </a>
+                  <a href="mailto:2371849349@qq.com?subject=滴答清单扩展反馈&body=请描述您遇到的问题或建议：" class="about-button contact-button">
+                    <span class="material-icons">mail</span>
+                    联系我们
+                  </a>
+                </div>
               </div>
             </div>
           </div>

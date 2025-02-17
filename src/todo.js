@@ -218,7 +218,7 @@ class TodoManager {
       const activeTasks = tasks.filter(task => task.status !== 2);
       const completedTasks = tasks.filter(task => task.status === 2);
       
-      // 更新任务计数
+      // 更新项目列表中的任务计数
       this.updateTaskCount(projectId, activeTasks.length);
       
       // 更新当前项目标题中的任务计数
@@ -227,6 +227,17 @@ class TodoManager {
         if (taskCount) {
           taskCount.textContent = `${activeTasks.length} 个任务`;
         }
+      }
+
+      // 更新进行中和已完成任务的计数
+      const activeCount = document.querySelector('.active-count');
+      const completedCount = document.querySelector('.completed-count');
+      
+      if (activeCount) {
+        activeCount.textContent = activeTasks.length;
+      }
+      if (completedCount) {
+        completedCount.textContent = completedTasks.length;
       }
       
       // 渲染任务列表
@@ -379,8 +390,14 @@ class TodoManager {
 
       // 添加编辑按钮事件
       const editButton = taskElement.querySelector('.edit-task');
-      editButton.addEventListener('click', () => {
-        this.editTask(task.id);
+      editButton.addEventListener('click', (e) => {
+        // 如果点击的是复选框，则不触发编辑
+        if (e.target.type === 'checkbox') return;
+        
+        // 如果点击的是删除按钮，则不触发编辑
+        if (e.target.closest('.delete-task')) return;
+        
+        this.editTask(taskElement, task);
       });
 
       // 添加删除按钮事件
@@ -477,195 +494,133 @@ class TodoManager {
     }
   }
 
-  // 编辑任务
-  async editTask(taskId) {
-    try {
-      // 获取当前任务所属的项目ID和任务详情
-      const projects = await this.didaService.getProjects();
-      let projectId = null;
-      let taskData = null;
-      
-      // 遍历项目查找任务
-      for (const project of projects) {
-        const projectData = await this.didaService.getProjectData(project.id);
-        const task = projectData.tasks.find(t => t.id === taskId);
-        if (task) {
-          projectId = project.id;
-          taskData = task;
-          break;
-        }
-      }
-
-      if (!projectId || !taskData) {
-        throw new Error('找不到任务');
-      }
-
-      // 获取当前任务项元素
-      const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
-      if (!taskElement) {
-        throw new Error('找不到任务元素');
-      }
-
-      // 移除其他任务项的编辑状态和编辑面板
-      document.querySelectorAll('.todo-item.editing').forEach(item => {
-        if (item !== taskElement) {
-          item.classList.remove('editing');
-          const panel = item.nextElementSibling;
-          if (panel && panel.classList.contains('task-edit-panel')) {
-            panel.remove();
-          }
-        }
-      });
-
-      // 添加编辑状态样式
-      taskElement.classList.add('editing');
-
-      // 创建编辑面板
-      const editPanel = document.createElement('div');
-      editPanel.className = 'task-edit-panel';
-      editPanel.innerHTML = `
-        <div class="quick-add-input-wrapper">
-          <input type="text" id="edit-task-title" placeholder="任务标题">
-          <div class="quick-add-actions">
-            <button class="icon-button" id="edit-task-settings" title="更多设置">
-              <span class="material-icons">settings</span>
+  // 添加任务编辑相关方法
+  async editTask(taskElement, task) {
+    // 创建编辑表单
+    const editForm = document.createElement('div');
+    editForm.className = 'task-edit-form';
+    
+    editForm.innerHTML = `
+      <div class="edit-main">
+        <input type="text" class="task-title-input" value="${task.title}" placeholder="任务标题">
+        <textarea class="task-content-input" placeholder="添加备注...">${task.content || ''}</textarea>
+      </div>
+      <div class="edit-settings">
+        <div class="setting-group">
+          <label>优先级</label>
+          <div class="priority-buttons">
+            <button type="button" class="priority-button ${task.priority === 0 ? 'selected' : ''}" data-priority="0">
+              <span class="material-icons">radio_button_${task.priority === 0 ? 'checked' : 'unchecked'}</span>
+              普通
+            </button>
+            <button type="button" class="priority-button ${task.priority === 1 ? 'selected' : ''}" data-priority="1">
+              <span class="material-icons">radio_button_${task.priority === 1 ? 'checked' : 'unchecked'}</span>
+              低
+            </button>
+            <button type="button" class="priority-button ${task.priority === 3 ? 'selected' : ''}" data-priority="3">
+              <span class="material-icons">radio_button_${task.priority === 3 ? 'checked' : 'unchecked'}</span>
+              中
+            </button>
+            <button type="button" class="priority-button ${task.priority === 5 ? 'selected' : ''}" data-priority="5">
+              <span class="material-icons">radio_button_${task.priority === 5 ? 'checked' : 'unchecked'}</span>
+              高
             </button>
           </div>
         </div>
-        <div class="task-settings-panel" style="display: none;">
-          <div class="form-group">
-            <label>优先级</label>
-            <div class="input-wrapper">
-              <div class="priority-buttons">
-                <button class="priority-button" data-priority="0" title="普通优先级">
-                  <span class="material-icons">radio_button_unchecked</span>
-                  普通
-                </button>
-                <button class="priority-button" data-priority="1" title="低优先级">
-                  <span class="material-icons">radio_button_unchecked</span>
-                  低
-                </button>
-                <button class="priority-button" data-priority="3" title="中优先级">
-                  <span class="material-icons">radio_button_unchecked</span>
-                  中
-                </button>
-                <button class="priority-button" data-priority="5" title="高优先级">
-                  <span class="material-icons">radio_button_unchecked</span>
-                  高
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="edit-task-due-date">截止日期</label>
-            <div class="input-wrapper">
-              <input type="datetime-local" id="edit-task-due-date">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="edit-task-tags">标签</label>
-            <div class="input-wrapper">
-              <input type="text" id="edit-task-tags" placeholder="用英文逗号分隔多个标签">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="primary-button" id="save-edit-task">保存</button>
-            <button class="secondary-button" id="cancel-edit-task">取消</button>
-          </div>
+        <div class="setting-group">
+          <label>截止日期</label>
+          <input type="datetime-local" class="due-date-input" value="${task.dueDate ? task.dueDate.slice(0, 16) : ''}">
         </div>
-      `;
+        <div class="setting-group">
+          <label>标签</label>
+          <input type="text" class="tags-input" value="${(task.tags || []).join(', ')}" placeholder="用英文逗号分隔多个标签">
+        </div>
+      </div>
+      <div class="edit-actions">
+        <button class="save-button">保存</button>
+        <button class="cancel-button">取消</button>
+      </div>
+    `;
 
-      // 在任务项后插入编辑面板
-      taskElement.after(editPanel);
+    // 替换原任务元素为编辑表单
+    taskElement.style.display = 'none';
+    taskElement.parentNode.insertBefore(editForm, taskElement);
 
-      // 获取编辑面板中的元素
-      const titleInput = editPanel.querySelector('#edit-task-title');
-      const settingsButton = editPanel.querySelector('#edit-task-settings');
-      const settingsPanel = editPanel.querySelector('.task-settings-panel');
-      const dueDateInput = editPanel.querySelector('#edit-task-due-date');
-      const tagsInput = editPanel.querySelector('#edit-task-tags');
-      const saveButton = editPanel.querySelector('#save-edit-task');
-      const cancelButton = editPanel.querySelector('#cancel-edit-task');
-      
-      // 填充表单数据
-      titleInput.value = taskData.title;
-      this.setPriorityButtonState(editPanel, taskData.priority || 0);
-      if (taskData.dueDate) {
-        const dueDate = new Date(taskData.dueDate);
-        dueDateInput.value = dueDate.toISOString().slice(0, 16);
-      } else {
-        dueDateInput.value = '';
+    // 添加点击空白处关闭编辑框的处理
+    const handleClickOutside = (e) => {
+      // 如果点击的不是编辑表单内的元素，则关闭编辑框
+      if (!editForm.contains(e.target)) {
+        // 移除事件监听器
+        document.removeEventListener('mousedown', handleClickOutside);
+        // 恢复原任务显示
+        taskElement.style.display = '';
+        // 移除编辑表单
+        editForm.remove();
       }
-      tagsInput.value = (taskData.tags || []).join(',');
+    };
 
-      // 聚焦到标题输入框
-      titleInput.focus();
+    // 延迟添加事件监听器，避免立即触发
+    setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+    }, 0);
 
-      // 设置按钮点击事件
-      settingsButton.onclick = () => {
-        const isHidden = settingsPanel.style.display === 'none';
-        settingsPanel.style.display = isHidden ? 'block' : 'none';
-        settingsPanel.classList.toggle('show');
+    // 阻止编辑表单内的点击事件冒泡
+    editForm.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+    });
+
+    // 设置优先级按钮事件
+    const priorityButtons = editForm.querySelectorAll('.priority-button');
+    priorityButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        priorityButtons.forEach(btn => {
+          btn.classList.remove('selected');
+          btn.querySelector('.material-icons').textContent = 'radio_button_unchecked';
+        });
+        button.classList.add('selected');
+        button.querySelector('.material-icons').textContent = 'radio_button_checked';
+      });
+    });
+
+    // 保存按钮事件
+    editForm.querySelector('.save-button').addEventListener('click', async () => {
+      // 移除点击空白处关闭的事件监听器
+      document.removeEventListener('mousedown', handleClickOutside);
+
+      const updatedTask = {
+        ...task,
+        title: editForm.querySelector('.task-title-input').value.trim(),
+        content: editForm.querySelector('.task-content-input').value.trim(),
+        priority: parseInt(editForm.querySelector('.priority-button.selected').dataset.priority),
+        dueDate: editForm.querySelector('.due-date-input').value,
+        tags: editForm.querySelector('.tags-input').value
+          .split(',')
+          .map(tag => tag.trim())
+          .filter(tag => tag)
       };
 
-      // 保存按钮点击事件
-      saveButton.onclick = async () => {
-        try {
-          // 格式化日期为API要求的格式
-          let formattedDueDate = null;
-          if (dueDateInput.value) {
-            const date = new Date(dueDateInput.value);
-            formattedDueDate = date.toISOString().replace(/\.\d{3}Z$/, '+0000');
-          }
+      try {
+        await this.didaService.updateTask(updatedTask);
+        await this.loadProjectTasks(task.projectId);
+        this.showSuccessMessage('任务更新成功');
+      } catch (error) {
+        this.showErrorMessage('更新任务失败: ' + error.message);
+      } finally {
+        editForm.remove();
+        taskElement.style.display = '';
+      }
+    });
 
-          const updatedTask = {
-            id: taskId,
-            projectId: projectId,
-            title: titleInput.value.trim(),
-            content: taskData.content || '',
-            desc: taskData.desc || '',
-            priority: this.getSelectedPriority(editPanel),
-            status: taskData.status,
-            dueDate: formattedDueDate,
-            isAllDay: taskData.isAllDay || false,
-            reminders: taskData.reminders || [],
-            repeatFlag: taskData.repeatFlag || null,
-            tags: tagsInput.value ? tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag) : [],
-          };
+    // 取消按钮事件
+    editForm.querySelector('.cancel-button').addEventListener('click', () => {
+      // 移除点击空白处关闭的事件监听器
+      document.removeEventListener('mousedown', handleClickOutside);
+      editForm.remove();
+      taskElement.style.display = '';
+    });
 
-          // 验证必填字段
-          if (!updatedTask.title) {
-            throw new Error('任务标题不能为空');
-          }
-
-          // 更新任务
-          await this.didaService.updateTask(updatedTask);
-
-          // 刷新任务列表
-          await this.refreshTaskList();
-
-          // 移除编辑状态和编辑面板
-          taskElement.classList.remove('editing');
-          editPanel.remove();
-
-          // 显示成功消息
-          this.showSuccessMessage('任务更新成功');
-        } catch (error) {
-          console.error('更新任务失败:', error);
-          this.showErrorMessage('更新任务失败: ' + error.message);
-        }
-      };
-
-      // 取消按钮点击事件
-      cancelButton.onclick = () => {
-        taskElement.classList.remove('editing');
-        editPanel.remove();
-      };
-
-    } catch (error) {
-      console.error('编辑任务失败:', error);
-      this.showErrorMessage('编辑任务失败: ' + error.message);
-    }
+    // 自动聚焦标题输入框
+    editForm.querySelector('.task-title-input').focus();
   }
 
   // 删除任务
@@ -753,6 +708,23 @@ class TodoManager {
 
   setupEventListeners() {
     // 移除添加按钮的事件监听
+
+    // 设置标签页切换
+    const tabButtons = document.querySelectorAll('.settings-tab-button');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // 移除所有标签页和按钮的激活状态
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.settings-tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+
+        // 激活当前标签页和按钮
+        button.classList.add('active');
+        const tabId = button.dataset.tab;
+        document.getElementById(`${tabId}-settings`).classList.add('active');
+      });
+    });
   }
 
   // 初始化快速创建任务功能
@@ -1109,6 +1081,41 @@ class TodoManager {
       if (taskCount) {
         taskCount.textContent = `${count} 个任务`;
       }
+    }
+  }
+
+  showAboutPage() {
+    const aboutPage = document.querySelector('.about-page');
+    if (aboutPage) {
+      aboutPage.style.display = 'flex';
+      // 使用 requestAnimationFrame 确保过渡动画生效
+      requestAnimationFrame(() => {
+        aboutPage.classList.add('show');
+      });
+
+      // 点击空白处关闭
+      aboutPage.addEventListener('click', (e) => {
+        if (e.target === aboutPage) {
+          this.hideAboutPage();
+        }
+      });
+
+      // ESC 键关闭
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.hideAboutPage();
+        }
+      });
+    }
+  }
+
+  hideAboutPage() {
+    const aboutPage = document.querySelector('.about-page');
+    if (aboutPage) {
+      aboutPage.classList.remove('show');
+      setTimeout(() => {
+        aboutPage.style.display = 'none';
+      }, 300);
     }
   }
 }
