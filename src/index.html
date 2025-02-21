@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="extName">__MSG_extName__</title>
+  <title>ToDoTab</title>
   <link href="output.css" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="../images/favicon.png">
+  <link rel="icon" type="image/png" href="../images/ToDoTab-logo.png">
   <style id="dynamic-background"></style>
   <script src="localization.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -153,6 +153,18 @@
           </div>
         </div>
         
+        <!-- 添加项目右键菜单 -->
+        <div id="project-context-menu" class="context-menu" style="display: none;">
+          <div class="menu-item edit-project">
+            <span class="material-icons">edit</span>
+            <span>编辑项目</span>
+          </div>
+          <div class="menu-item delete-project">
+            <span class="material-icons">delete</span>
+            <span>删除项目</span>
+          </div>
+        </div>
+        
         <!-- 进行中任务列表 -->
         <div class="todo-list-container">
           <div class="todo-header">
@@ -239,8 +251,8 @@
       <div class="about-page" style="display: none;">
         <div class="about-content">
           <div class="about-header">
-            <img src="../images/icon-128.png" alt="插件图标" class="about-logo">
-            <h2>滴答清单 Chrome 扩展</h2>
+            <img src="../images/ToDoTab-logo.png" alt="ToDoTab" class="about-logo">
+            <h2>ToDoTab</h2>
             <span class="version">v1.227</span>
           </div>
           
@@ -437,13 +449,13 @@
             <div id="about-settings" class="settings-tab-content">
               <div class="about-content">
                 <div class="about-header">
-                  <img src="../images/icon-128.png" alt="插件图标" class="about-logo">
-                  <h2>滴答清单 Chrome 扩展</h2>
-                  <span class="version">v1.227</span>
+                  <img src="../images/ToDoTab-logo.png" alt="ToDoTab" class="about-logo">
+                  <h2>ToDoTab</h2>
+                  <span class="version">v1.127</span>
                 </div>
                 
                 <div class="about-description">
-                  <p>这是一个帮助你高效管理任务的 Chrome 扩展，支持与滴答清单同步，随时随地管理你的待办事项。</p>
+                  <p>这是一个帮助你高效管理任务的 Chrome 扩展，支持与滴答清单同步，简化了滴答清单的操作，随时随地管理你的待办事项。</p>
                 </div>
                 
                 <div class="about-features">
@@ -459,7 +471,7 @@
                 </div>
                 
                 <div class="about-actions">
-                  <a href="https://wj.qq.com/s2/12345678/abcd" target="_blank" class="about-button feedback-button">
+                  <a href="https://www.wjx.cn/vm/ml15bqZ.aspx" target="_blank" class="about-button feedback-button">
                     <span class="material-icons">feedback</span>
                     问题反馈
                   </a>
