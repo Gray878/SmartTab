@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ToDoTab",
-  "version": "1.227",
+  "version": "1.127",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
   "chrome_url_overrides": {
@@ -21,8 +21,6 @@
   },
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv8+LmA7QqQ==",
   "host_permissions": [
-    "https://*/*",
-    "http://*/*",
     "https://api.dida365.com/*",
     "https://dida365.com/*",
     "https://*.chromiumapp.org/*",

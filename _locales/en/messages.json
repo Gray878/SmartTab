@@ -1,10 +1,10 @@
 {
     "extName": {
-        "message": "ToDoTab New Tab",
+        "message": "ToDoTab",
         "description": "The name of the extension"
     },
     "extDescription": {
-        "message": "TabMark is a bookmark-based new tab page application that helps you efficiently organize and access your bookmarks.",
+        "message": "ToDoTab is a powerful new tab extension that integrates AI search, Dida365 task management, and personalized customization.",
         "description": "The description of the extension"
     },
     "welcomeMessage": {
@@ -228,5 +228,73 @@
     },
     "settingsTitle": {
         "message": "Settings"
+    },
+    "googleTab": {
+        "message": "Google",
+        "description": "Google search engine tab"
+    },
+    "bingTab": {
+        "message": "Bing",
+        "description": "Bing search engine tab"
+    },
+    "baiduTab": {
+        "message": "Baidu",
+        "description": "Baidu search engine tab"
+    },
+    "kimiTab": {
+        "message": "Kimi",
+        "description": "Kimi search engine tab"
+    },
+    "deepseekTab": {
+        "message": "DeepSeek",
+        "description": "DeepSeek search engine tab"
+    },
+    "welcomeStyleBasic": {
+        "message": "Basic Greeting",
+        "description": "Basic greeting style"
+    },
+    "welcomeStyleClock": {
+        "message": "Clock Display",
+        "description": "Clock display style"
+    },
+    "welcomeStylePoem": {
+        "message": "Daily Poem",
+        "description": "Daily poem style"
+    },
+    "welcomeStyleVoyager": {
+        "message": "Voyager 1",
+        "description": "Voyager 1 style"
+    },
+    "welcomeStyleProgress": {
+        "message": "Year Progress",
+        "description": "Year progress style"
+    },
+    "shortcutsTip": {
+        "message": "Tip: Shortcuts must include the Alt key, combined with number or letter keys",
+        "description": "Shortcut setting tip"
+    },
+    "resetShortcut": {
+        "message": "Reset",
+        "description": "Reset shortcut button"
+    },
+    "shortcutConflict": {
+        "message": "Shortcut already in use",
+        "description": "Shortcut conflict tip"
+    },
+    "dida365Login": {
+        "message": "Connect to Dida365",
+        "description": "Dida365 login title"
+    },
+    "dida365LoginDesc": {
+        "message": "Sign in with your Dida365 account to sync your tasks",
+        "description": "Dida365 login description"
+    },
+    "dida365Connect": {
+        "message": "Connect to Dida365",
+        "description": "Connect to Dida365 button"
+    },
+    "dida365SignUp": {
+        "message": "Don't have an account? Sign up",
+        "description": "Dida365 sign up link"
     }
 }

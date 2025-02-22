@@ -1,10 +1,10 @@
 {
     "extName": {
-        "message": "ToDoTab",
+        "message": "ToDoTab 新标签页",
         "description": "扩展的名称"
     },
     "extDescription": {
-        "message": "ToDoTab 是一个功能强大且简洁的新标签页扩展，集成了智能 AI 搜索、任务管理、个性化定制等功能。",
+        "message": "ToDoTab 是一个功能强大且简洁的新标签页扩展，集成了智能 AI 搜索、滴答清单任务管理、个性化定制等功能。",
         "description": "扩展的描述"
     },
     "welcomeMessage": {
@@ -14,10 +14,6 @@
     "searchPlaceholder": {
         "message": "按 Enter 键搜索",
         "description": "搜索输入框的占位文本"
-    },
-    "editDialogTitle": {
-        "message": "编辑快捷链接",
-        "description": "编辑对话框的标题"
     },
     "editNameLabel": {
         "message": "名称：",
@@ -81,15 +77,11 @@
     },
     "settingsTitle": {
         "message": "设置",
-        "description": "设置模态框的标题"
+        "description": "设置标题"
     },
     "appearanceTab": {
         "message": "外观",
-        "description": "外观设置标签名"
-    },
-    "floatingBallTab": {
-        "message": "悬浮球设置",
-        "description": "悬浮球设置标签名"
+        "description": "外观设置标签"
     },
     "languageTab": {
         "message": "语言",
@@ -99,17 +91,9 @@
         "message": "背景颜色",
         "description": "背景颜色设置标题"
     },
-    "floatingBallSettingsTitle": {
+    "floatingBallTab": {
         "message": "悬浮球设置",
-        "description": "悬浮球设置标题"
-    },
-    "floatingBallDescription": {
-        "message": "开启悬浮球后会在页面右上角显示一个可点击的悬浮图标，用于快速访问搜索引擎和书签。",
-        "description": "悬浮球功能描述"
-    },
-    "enableFloatingBall": {
-        "message": "开启悬浮球",
-        "description": "开启悬浮球的标签"
+        "description": "悬浮球设置标签名"
     },
     "languageSettingsTitle": {
         "message": "语言 / Language",
@@ -122,10 +106,6 @@
     "chineseOption": {
         "message": "中文（简体）",
         "description": "简体中文语言选项"
-    },
-    "confirmDeleteMessage": {
-        "message": "您确定要删除 \"$1\" 吗？",
-        "description": "确认删除项目的消息"
     },
     "confirmDeleteBookmark": {
         "message": "您确定要删除书签 \"$1\" 吗？",
@@ -158,10 +138,6 @@
     "folderDeleted": {
         "message": "文件夹已删除：ID=$1，标题=$2",
         "description": "文件夹删除时的日志消息"
-    },
-    "confirmDeleteMessage": {
-        "message": "您确定要删除 \"$1\" 吗？",
-        "description": "确认删除项目的消息"
     },
     "morningGreeting": {
         "message": "早上好👋",
@@ -199,14 +175,6 @@
         "message": "确认删除",
         "description": "确认删除对话框的标题"
     },
-    "confirmDeleteMessage": {
-        "message": "您确定要删除 \"$1\" 吗？",
-        "description": "确认删除项目的消息"
-    },
-    "scanQRCode": {
-        "message": "扫描二维码",
-        "description": "二维码模态窗口的标题"
-    },
     "doubaoTab": {
         "message": "豆包",
         "description": "豆包搜索引擎标签"
@@ -226,34 +194,6 @@
     "moreSearchSupportToast": {
         "message": "更多搜索支持即将推出",
         "description": "更多搜索支持提示"
-    },
-    "settingsTitle": {
-        "message": "设置",
-        "description": "设置标题"
-    },
-    "appearanceTab": {
-        "message": "外观",
-        "description": "外观设置标签"
-    },
-    "floatingBallTab": {
-        "message": "悬浮球",
-        "description": "悬浮球设置标签"
-    },
-    "backgroundColorTitle": {
-        "message": "背景颜色",
-        "description": "背景颜色设置标题"
-    },
-    "floatingBallSettingsTitle": {
-        "message": "悬浮球设置",
-        "description": "悬浮球设置标题"
-    },
-    "floatingBallDescription": {
-        "message": "开启悬浮球后会在页面右上角显示一个可点击的悬浮图标，用于快速访问搜索引擎和书签。",
-        "description": "悬浮球功能描述"
-    },
-    "enableFloatingBall": {
-        "message": "启用悬浮球",
-        "description": "启用悬浮球选项"
     },
     "historyLinkTitle": {
         "message": "历史记录",
@@ -286,7 +226,72 @@
     "shortcutsTab": {
         "message": "快捷键"
     },
-    "settingsTitle": {
-        "message": "设置"
+    "googleTab": {
+        "message": "Google",
+        "description": "Google 搜索引擎标签"
+    },
+    "bingTab": {
+        "message": "Bing",
+        "description": "Bing 搜索引擎标签"
+    },
+    "baiduTab": {
+        "message": "百度",
+        "description": "百度搜索引擎标签"
+    },
+    "kimiTab": {
+        "message": "Kimi",
+        "description": "Kimi 搜索引擎标签"
+    },
+    "deepseekTab": {
+        "message": "DeepSeek",
+        "description": "DeepSeek 搜索引擎标签"
+    },
+    "welcomeStyleBasic": {
+        "message": "基础问候",
+        "description": "基础问候样式"
+    },
+    "welcomeStyleClock": {
+        "message": "时钟显示",
+        "description": "时钟显示样式"
+    },
+    "welcomeStylePoem": {
+        "message": "每日诗词",
+        "description": "每日诗词样式"
+    },
+    "welcomeStyleVoyager": {
+        "message": "旅行者1号",
+        "description": "旅行者1号样式"
+    },
+    "welcomeStyleProgress": {
+        "message": "年度进度",
+        "description": "年度进度样式"
+    },
+    "shortcutsTip": {
+        "message": "提示: 快捷键必须包含 Alt 键，可以与数字键或字母键组合",
+        "description": "快捷键设置提示"
+    },
+    "resetShortcut": {
+        "message": "重置",
+        "description": "重置快捷键按钮"
+    },
+    "shortcutConflict": {
+        "message": "快捷键已被占用",
+        "description": "快捷键冲突提示"
+    },
+    "dida365Login": {
+        "message": "连接滴答清单",
+        "description": "滴答清单登录标题"
+    },
+    "dida365LoginDesc": {
+        "message": "使用滴答清单账号登录，同步你的待办事项",
+        "description": "滴答清单登录描述"
+    },
+    "dida365Connect": {
+        "message": "连接滴答清单",
+        "description": "连接滴答清单按钮"
+    },
+    "dida365SignUp": {
+        "message": "还没有账号？立即注册",
+        "description": "滴答清单注册链接"
     }
 }

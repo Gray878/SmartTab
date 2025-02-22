@@ -264,58 +264,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // 初始化快捷键设置
   initShortcutInputs();
 
-  // 搜索相关事件处理
-  searchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const query = this.value.trim();
-      if (query) {
-        performSearch(query);
-      }
-    }
-  });
-
-  searchForm.addEventListener('submit', (e) => {
+  // 修改搜索表单提交事件
+  searchForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const query = searchInput.value.trim();
-    if (query) {
-      performSearch(query);
+    if (!query) return;
+
+    const selectedEngine = localStorage.getItem('selectedSearchEngine') || 'baidu';
+    const searchUrls = {
+      baidu: `https://www.baidu.com/s?wd=${encodeURIComponent(query)}`,
+      google: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+      bing: `https://www.bing.com/search?q=${encodeURIComponent(query)}`,
+      doubao: `https://www.doubao.com/search?q=${encodeURIComponent(query)}`,
+      kimi: `https://kimi.moonshot.cn/?q=${encodeURIComponent(query)}`,
+      metaso: `https://metaso.cn/#q=${encodeURIComponent(query)}`,
+      deepseek: `https://chat.deepseek.com/?q=${encodeURIComponent(query)}`
+    };
+
+    const url = searchUrls[selectedEngine];
+    if (url) {
+      // 替换当前标签页的URL，而不是打开新标签页
+      window.location.href = url;
     }
   });
-
-  function performSearch(query) {
-    if (!query) return;
-    
-    const selectedEngine = localStorage.getItem('selectedSearchEngine') || 'baidu';
-    const url = getSearchUrl(selectedEngine, query);
-    window.open(url, '_blank');
-  }
-
-  function getSearchUrl(engine, query) {
-    switch (engine.toLowerCase()) {
-      case 'kimi':
-        return `https://kimi.moonshot.cn/?q=${encodeURIComponent(query)}`;
-      case 'doubao':
-      case '豆包':
-        return `https://www.doubao.com/chat/?q=${encodeURIComponent(query)}`;
-      case 'deepseek':
-        return `https://chat.deepseek.com/?q=${encodeURIComponent(query)}`;
-      case 'metaso':
-      case '秘塔':
-        return `https://metaso.cn/?q=${query}`;
-      case 'google':
-      case '谷歌':
-        return `https://www.google.com/search?q=${query}`;
-      case 'bing':
-      case '必应':
-        return `https://www.bing.com/search?q=${query}`;
-      case 'baidu':
-      case '百度':
-        return `https://www.baidu.com/s?wd=${query}`;
-      default:
-        return `https://www.baidu.com/s?wd=${query}`; // 默认使用百度搜索
-    }
-  }
 
   // 设置相关功能
   const settingsModal = document.getElementById('settings-modal');

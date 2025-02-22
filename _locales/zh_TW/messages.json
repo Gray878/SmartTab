@@ -1,10 +1,10 @@
 {
     "extName": {
-        "message": "ToDoTab New Tab",
+        "message": "ToDoTab 新分頁",
         "description": "擴充功能的名稱"
     },
     "extDescription": {
-        "message": "TabMark 是一個基於書籤的新分頁應用程式，幫助您高效地組織和訪問您的書籤。",
+        "message": "ToDoTab 是一個功能強大且簡潔的新分頁擴充功能，整合了智慧 AI 搜尋、滴答清單任務管理、個性化定制等功能。",
         "description": "擴充功能的描述"
     },
     "welcomeMessage": {
@@ -270,5 +270,73 @@
     "yearProgress": {
         "message": "年進度",
         "description": "年進度顯示"
+    },
+    "googleTab": {
+        "message": "Google",
+        "description": "Google 搜尋引擎標籤"
+    },
+    "bingTab": {
+        "message": "Bing",
+        "description": "Bing 搜尋引擎標籤"
+    },
+    "baiduTab": {
+        "message": "百度",
+        "description": "百度搜尋引擎標籤"
+    },
+    "kimiTab": {
+        "message": "Kimi",
+        "description": "Kimi 搜尋引擎標籤"
+    },
+    "deepseekTab": {
+        "message": "DeepSeek",
+        "description": "DeepSeek 搜尋引擎標籤"
+    },
+    "welcomeStyleBasic": {
+        "message": "基礎問候",
+        "description": "基礎問候樣式"
+    },
+    "welcomeStyleClock": {
+        "message": "時鐘顯示",
+        "description": "時鐘顯示樣式"
+    },
+    "welcomeStylePoem": {
+        "message": "每日詩詞",
+        "description": "每日詩詞樣式"
+    },
+    "welcomeStyleVoyager": {
+        "message": "旅行者1號",
+        "description": "旅行者1號樣式"
+    },
+    "welcomeStyleProgress": {
+        "message": "年度進度",
+        "description": "年度進度樣式"
+    },
+    "shortcutsTip": {
+        "message": "提示: 快捷鍵必須包含 Alt 鍵，可以與數字鍵或字母鍵組合",
+        "description": "快捷鍵設置提示"
+    },
+    "resetShortcut": {
+        "message": "重置",
+        "description": "重置快捷鍵按鈕"
+    },
+    "shortcutConflict": {
+        "message": "快捷鍵已被佔用",
+        "description": "快捷鍵衝突提示"
+    },
+    "dida365Login": {
+        "message": "連接滴答清單",
+        "description": "滴答清單登入標題"
+    },
+    "dida365LoginDesc": {
+        "message": "使用滴答清單帳號登入，同步你的待辦事項",
+        "description": "滴答清單登入描述"
+    },
+    "dida365Connect": {
+        "message": "連接滴答清單",
+        "description": "連接滴答清單按鈕"
+    },
+    "dida365SignUp": {
+        "message": "還沒有帳號？立即註冊",
+        "description": "滴答清單註冊連結"
     }
 }
